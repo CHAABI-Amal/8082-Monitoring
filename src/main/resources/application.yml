@@ -1,0 +1,8 @@
+spring:
+  data:
+    cassandra:
+      entity-base-package: com.chaabiamal.springboot_cassandra_demo.model
+  cassandra:
+    port: 9042
+    contact-points: mycassandra
+    keyspace-name: mykeyspace
