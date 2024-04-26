@@ -1,0 +1,18 @@
+package com.chaabiamal.springboot_cassandra_demo.repository;
+
+import com.chaabiamal.springboot_cassandra_demo.model.Composant;
+import com.chaabiamal.springboot_cassandra_demo.model.historiqueComposant;
+import org.springframework.data.cassandra.repository.CassandraRepository;
+import org.springframework.data.cassandra.repository.Query;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+public interface historiqueComposantRepository extends CassandraRepository<historiqueComposant, UUID> {
+
+    @Query("SELECT * FROM mykeyspace.historiqueComposant WHERE id = ?0") // Specify keyspace and table name
+    historiqueComposant findByid(UUID id);
+
+}
