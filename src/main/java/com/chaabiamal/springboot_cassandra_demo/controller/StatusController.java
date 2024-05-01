@@ -31,16 +31,22 @@ public class StatusController {
 
     @Autowired
     private StatusMapper StatusMapper;
-
+    @GetMapping("")
+    public List<StatusDTO> getStatus() {
+        List<Status> Status = StatusRepository.findAll();
+        return Status.stream()
+                .map(StatusMapper::toDto)
+                .collect(Collectors.toList());
+    }
     @PostMapping("")
-    public ResponseEntity<StatusDTO> addKiosk(@Valid @RequestBody StatusDTO statusDTO) throws URISyntaxException {
+    public ResponseEntity<StatusDTO> addStatus(@Valid @RequestBody StatusDTO statusDTO) throws URISyntaxException {
         Status status = StatusMapper.toEntity(statusDTO);
         TypeStatus[] types = TypeStatus.values();
         int id = -1; // ID par défaut si aucune correspondance n'est trouvée
         for (TypeStatus type : types) {
             if (type.name().equalsIgnoreCase(statusDTO.Value()+"")) {
                 id = type.ordinal() + 1; // L'ID est l'indice de l'énumération + 1
-                status.setValue(type);
+                status.setValue(status+"");
                 break;
             }
         }
@@ -67,13 +73,7 @@ public class StatusController {
         return ResponseEntity.ok().body(StatusDTO);
     }
 
-    @GetMapping("")
-    public List<StatusDTO> getStatus() {
-        List<Status> Status = StatusRepository.findAll();
-        return Status.stream()
-                .map(StatusMapper::toDto)
-                .collect(Collectors.toList());
-    }
+
 
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteKiosk(@PathVariable(value = "id") int StatusId) {

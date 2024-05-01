@@ -1,19 +1,28 @@
 package com.chaabiamal.springboot_cassandra_demo.model;
 
+import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
+import org.springframework.data.cassandra.core.mapping.Column;
 import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.util.UUID;
 
 @Table(value = "kiosk") // Nom de la table
 public class Kiosk {
-    @PrimaryKey
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private UUID kioskId;
+    @Column("Value")
     private String name;
+    @Column("Value")
     private String code;
+    @Column("Value")
     private boolean isOnline;
+    @Column("Value")
     private String description;
+    @Column("ipAddress")
     private String ipAddress; // Modifier le type en String
+    @Column("machineName")
     private String machineName;
 
     public UUID getKioskId() {

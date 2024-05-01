@@ -1,19 +1,19 @@
 package com.chaabiamal.springboot_cassandra_demo.model;
 
-import org.springframework.data.cassandra.core.mapping.Frozen;
-import org.springframework.data.cassandra.core.mapping.PrimaryKey;
-import org.springframework.data.cassandra.core.mapping.Table;
+import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
+import org.springframework.data.cassandra.core.mapping.*;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 @Table(value = "historiqueComposant")
-public class historiqueComposant {
-    @PrimaryKey
-
+public class historiqueComposant implements Serializable {
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     private UUID id;
-    @Frozen
-    private List<Composant> composants;
+    @Column("ComposantId")
+    private List<Composant> composants=new ArrayList<>();
 
 
     // Constructeur

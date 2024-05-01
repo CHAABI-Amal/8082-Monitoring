@@ -1,7 +1,9 @@
 package com.chaabiamal.springboot_cassandra_demo.controller;
 import com.chaabiamal.springboot_cassandra_demo.Exception.ResourceNotFoundException;
 import com.chaabiamal.springboot_cassandra_demo.model.Composant;
+import com.chaabiamal.springboot_cassandra_demo.model.historiqueComposant;
 import com.chaabiamal.springboot_cassandra_demo.repository.ComposantRepository;
+import com.chaabiamal.springboot_cassandra_demo.repository.historiqueComposantRepository;
 import com.chaabiamal.springboot_cassandra_demo.service.ComposantService;
 import com.chaabiamal.springboot_cassandra_demo.service.dto.ComposantDTO;
 import com.chaabiamal.springboot_cassandra_demo.service.mapper.ComposantMapper;
@@ -18,12 +20,15 @@ import java.util.stream.Collectors;
 import static org.springframework.boot.web.servlet.filter.ApplicationContextHeaderFilter.HEADER_NAME;
 
 @RestController
+
 @RequestMapping("/amal/composants")
 public class ComposantController {
     @Autowired
     private final ComposantService composantService;
     @Autowired
     private ComposantRepository composantRepository;
+    @Autowired
+    private historiqueComposantRepository historiquecomposantRepository;
 
     @Autowired
     private ComposantMapper composantMapper;
@@ -31,6 +36,32 @@ public class ComposantController {
     @Autowired
     public ComposantController(ComposantService composantService) {
         this.composantService = composantService;
+    }
+    @GetMapping("")
+    public List<ComposantDTO> getComposant() {
+        List<Composant> composants = composantRepository.findAll();
+
+        return composants.stream()
+                .map(composant -> {
+                    ComposantDTO composantDTO = composantMapper.toDto(composant);
+                    return composantDTO;
+                })
+                .collect(Collectors.toList());
+    }
+
+    @GetMapping("/manuel")
+    public List<ComposantDTO> getComposantMan() {
+        List<Composant> composants = composantRepository.findwithoutHistorique();
+
+        return composants.stream()
+                .map(composant -> {
+                    historiqueComposant historique = historiquecomposantRepository.findByid(composantRepository.findhistoriqueID()); // Recherche de l'historique par l'UUID
+                    System.out.println("((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((("+historique.getId());
+                    composant.setHistorique(historique);
+                    ComposantDTO composantDTO = composantMapper.toDto(composant);
+                    return composantDTO;
+                })
+                .collect(Collectors.toList());
     }
 
     @PostMapping("")
@@ -61,13 +92,7 @@ public class ComposantController {
         ComposantDTO composantDTO = composantMapper.toDto(composant);
         return ResponseEntity.ok().body(composantDTO);
     }
-    @GetMapping("")
-    public List<ComposantDTO> getComposant() {
-        List<Composant> Composant= composantRepository.findAll();
-        return Composant.stream()
-                .map(composantMapper::toDto)
-                .collect(Collectors.toList());
-    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteComposant(@PathVariable("id") UUID composantId) {
         composantService.delete(composantId);

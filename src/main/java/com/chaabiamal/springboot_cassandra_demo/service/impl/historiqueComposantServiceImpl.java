@@ -62,7 +62,7 @@ public class historiqueComposantServiceImpl implements historiqueComposantServic
                                     composant.setInstanceCode(composant.getInstanceCode());
                                     composant.setAdditionalInfo(composant.getAdditionalInfo());
                                     composant.setComponentTypeId(composant.getComponentTypeId());
-                                    composant.setHistoriqueId(composant.getHistoriqueId());
+                                    composant.setHistorique(composant.getHistorique());
                                     composant.setLastStatus(composant.getLastStatus());
                                     composant.setDeleted(composant.isDeleted());
                                     return composant;

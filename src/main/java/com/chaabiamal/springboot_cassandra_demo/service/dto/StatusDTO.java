@@ -4,7 +4,7 @@ import com.chaabiamal.springboot_cassandra_demo.model.TypeStatus;
 
 public record StatusDTO(
         int ID,
-        TypeStatus Value,
+        String Value,
         String Description
 ) {
 }

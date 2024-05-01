@@ -1,10 +1,22 @@
 package com.chaabiamal.springboot_cassandra_demo.model;
 
-import java.util.UUID;
+import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
+import org.springframework.data.cassandra.core.mapping.Column;
+import org.springframework.data.cassandra.core.mapping.PrimaryKey;
+import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
+import org.springframework.data.cassandra.core.mapping.Table;
 
-public class Status {
+import java.io.Serializable;
+import java.util.UUID;
+@Table(value = "Status")
+
+public class Status implements Serializable {
+    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
         private int ID;
-        private TypeStatus Value;
+        @Column("Value")
+
+        private String Value;
+        @Column("Description")
         private String Description;
 
 
@@ -19,11 +31,11 @@ public class Status {
         this.ID = ID;
     }
 
-    public TypeStatus getValue() {
+    public String getValue() {
         return Value;
     }
 
-    public void setValue(TypeStatus value) {
+    public void setValue(String value) {
         Value = value;
     }
 

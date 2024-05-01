@@ -45,44 +45,57 @@ public class ComposantServiceImpl implements ComposantService {
         return composantMapper.toDto(composant);
     }
 
-
-
-    @Override
     public Optional<ComposantDTO> partialUpdate(UUID id, ComposantDTO composantDTO) {
         return composantRepository.findById(id)
                 .map(existingComposant -> {
                     if (composantDTO.id() != null) {
                         existingComposant.setId(composantDTO.id());
-                        // Ajouter les autres mises à jour partielles ici
-                    }
-                    if (composantDTO.historiqueId() != null) {
-                        existingComposant.setHistoriqueId(composantDTO.historiqueId());
-                        // Ajouter les autres mises à jour partielles ici
                     }
                     if (composantDTO.lastStatus() != null) {
                         existingComposant.setLastStatus(composantDTO.lastStatus());
-                        // Ajouter les autres mises à jour partielles ici
                     }
-                    if (composantDTO.isDeleted() ) {
+                    if (composantDTO.isDeleted()) {
                         existingComposant.setDeleted(composantDTO.isDeleted());
-                        // Ajouter les autres mises à jour partielles ici
                     }
-                    if (composantDTO.instanceName()!= null) {
+                    if (composantDTO.status()!= null) {
+                        existingComposant.setStatus(composantDTO.status());
+                    }
+                    if (composantDTO.instanceName() != null) {
                         existingComposant.setInstanceName(composantDTO.instanceName());
                     }
-                    if (composantDTO.additionalInfo()!= null) {
+                    if (composantDTO.additionalInfo() != null) {
                         existingComposant.setAdditionalInfo(composantDTO.additionalInfo());
                     }
-                    if (composantDTO.componentTypeId()!= null) {
+                    if (composantDTO.componentTypeId() != null) {
                         existingComposant.setComponentTypeId(composantDTO.componentTypeId());
                     }
-                    if (composantDTO.instanceCode()!= null) {
+                    if (composantDTO.instanceCode() != null) {
                         existingComposant.setInstanceCode(composantDTO.instanceCode());
                     }
+                    if (composantDTO.kioskId() != null) {
+                        existingComposant.setKioskId(composantDTO.kioskId());
+                    }
+                    if (composantDTO.modelNumber() != null) {
+                        existingComposant.setModelNumber(composantDTO.modelNumber());
+                    }
+                    if (composantDTO.componentStatus() != null) {
+                        existingComposant.setComponentStatus(composantDTO.componentStatus());
+                    }
+                    if (composantDTO.statusDate() != null) {
+                        existingComposant.setStatusDate(composantDTO.statusDate());
+                    }
+                    if (composantDTO.createdDate() != null) {
+                        existingComposant.setCreatedDate(composantDTO.createdDate());
+                    }
+                    if (composantDTO.modifiedDate() != null) {
+                        existingComposant.setModifiedDate(composantDTO.modifiedDate());
+                    }
+
                     Composant updatedComposant = composantRepository.save(existingComposant);
                     return composantMapper.toDto(updatedComposant);
                 });
     }
+
 
     @Override
     public Page<ComposantDTO> findAll(Pageable pageable) {

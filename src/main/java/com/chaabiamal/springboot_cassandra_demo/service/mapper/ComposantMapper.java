@@ -10,5 +10,6 @@ public interface ComposantMapper {
     @Mapping(target = "id", ignore = true)
     Composant toEntity(ComposantDTO dto);
 
+    @Mapping(target = "historique", ignore = true) // Ignore historique when mapping to DTO
     ComposantDTO toDto(Composant entity);
 }
