@@ -6,10 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
 import org.springframework.data.cassandra.core.cql.Ordering;
 import org.springframework.data.cassandra.core.cql.PrimaryKeyType;
-import org.springframework.data.cassandra.core.mapping.Column;
-import org.springframework.data.cassandra.core.mapping.PrimaryKey;
-import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
-import org.springframework.data.cassandra.core.mapping.Table;
+import org.springframework.data.cassandra.core.mapping.*;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -21,37 +18,54 @@ import java.util.UUID;
 @Table(value = "composant")
 public class Composant implements Serializable {
     @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
+    @CassandraType(type = CassandraType.Name.UUID)
     private UUID id;
-    @Column("historique")
+    @Column("historiqueId")
+    @CassandraType(type = CassandraType.Name.UDT,userTypeName = "historiqueComposant")
     private historiqueComposant historique; // Cette variable sera utilisée pour la liaison avec HistoriqueComposant
     @Column("status")
+    @CassandraType(type = CassandraType.Name.UUID)
     private UUID status;//??? mnba3d
     @Column("additionalInfo")
+    @CassandraType(type = CassandraType.Name.TEXT)
     private String additionalInfo;
     @Column("lastStatusChangeTime")
+    @CassandraType(type = CassandraType.Name.TIMESTAMP)
     private LocalDateTime lastStatusChangeTime;
     @Column("lastStatus")
+    @CassandraType(type = CassandraType.Name.TEXT)
     private String lastStatus;
     @Column("instanceCode")
+    @CassandraType(type = CassandraType.Name.TEXT)
     private String instanceCode;
     @Column("kioskId")
+    @CassandraType(type = CassandraType.Name.UUID)
     private UUID kioskId;
     @Column("instanceName")
+    @CassandraType(type = CassandraType.Name.TEXT)
     private String instanceName;
     @Column("componentTypeId")
+    @CassandraType(type = CassandraType.Name.INT)
     private Integer componentTypeId;
     @Column("modelNumber")
+    @CassandraType(type = CassandraType.Name.TEXT)
     private String modelNumber;
     @Column("componentStatus")
+    @CassandraType(type = CassandraType.Name.TEXT)
     private String componentStatus;
     @Column("statusDate")
+    @CassandraType(type = CassandraType.Name.TIMESTAMP)
     private LocalDateTime statusDate;
     @Column("isDeleted")
+    @CassandraType(type = CassandraType.Name.BOOLEAN)
     private boolean isDeleted;
     // cluster key, so we can get automatically sorted data
     //@PrimaryKeyColumn(ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING, value = "created_at")
-
+    @Column("createdDate")
+    @CassandraType(type = CassandraType.Name.TIMESTAMP)
     private LocalDateTime createdDate;
+    @Column("modifiedDate")
+    @CassandraType(type = CassandraType.Name.TIMESTAMP)
     private LocalDateTime modifiedDate;
 //****************************************
     // Constructeur
