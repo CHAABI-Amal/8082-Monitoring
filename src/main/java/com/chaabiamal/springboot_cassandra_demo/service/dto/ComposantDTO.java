@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public record ComposantDTO(
         UUID id,
-        historiqueComposantDTO historique,
+        UUID historiqueComposant,
         UUID  status,
         String additionalInfo,
         LocalDateTime lastStatusChangeTime,
@@ -19,7 +19,7 @@ public record ComposantDTO(
         String modelNumber,
         String componentStatus,
         LocalDateTime statusDate,
-        boolean isDeleted,
+        boolean isdeleted,
         LocalDateTime createdDate,
         LocalDateTime modifiedDate
 ) {}

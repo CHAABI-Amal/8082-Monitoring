@@ -2,6 +2,7 @@ package com.chaabiamal.springboot_cassandra_demo.Configuration;
 
 import com.datastax.oss.driver.api.core.CqlSession;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.cassandra.CqlSessionBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -12,10 +13,11 @@ import org.springframework.data.cassandra.core.CassandraTemplate;
 import org.springframework.data.cassandra.core.cql.keyspace.CreateKeyspaceSpecification;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 
+import java.nio.file.Path;
 import java.util.List;
 
 @Configuration
-@EnableCassandraRepositories
+@EnableCassandraRepositories(basePackages = {"com.chaabiamal.springboot_cassandra_demo.repository"})
 public class CassandraConfiguration extends AbstractCassandraConfiguration {
 
     @Value("${env.values.cassandra.keyspace.name}")
@@ -42,13 +44,12 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
     @Bean
     @Override
     public CqlSessionFactoryBean cassandraSession() {
-        CqlSessionFactoryBean cassandraSession =
-                super.cassandraSession(); // super session should be called only once
-
-        return cassandraSession;
+        CqlSessionFactoryBean factory = new CqlSessionFactoryBean();
+        factory.setKeyspaceName(keyspaceName);
+        return factory;
     }
 }
-/*
+/*/*
 @Configuration
 @EnableCassandraRepositories(basePackages = {"com.chaabiamal.springboot_cassandra_demo.repository"})
 public class CassandraConfig extends AbstractCassandraConfiguration {

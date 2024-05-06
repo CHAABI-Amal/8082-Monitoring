@@ -5,8 +5,6 @@ import com.chaabiamal.springboot_cassandra_demo.repository.ComposantRepository;
 import com.chaabiamal.springboot_cassandra_demo.service.ComposantService;
 import com.chaabiamal.springboot_cassandra_demo.service.dto.ComposantDTO;
 import com.chaabiamal.springboot_cassandra_demo.service.mapper.ComposantMapper;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,15 +16,9 @@ import java.util.UUID;
 @Service
 public class ComposantServiceImpl implements ComposantService {
 
-    private final ComposantRepository composantRepository;
-    private final ComposantMapper composantMapper;
+    private  ComposantRepository composantRepository;
+    private ComposantMapper composantMapper;
 
-    @Autowired
-
-    public ComposantServiceImpl(ComposantRepository composantRepository, ComposantMapper composantMapper) {
-        this.composantRepository = composantRepository;
-        this.composantMapper = composantMapper;
-    }
 
     @Override
     public ComposantDTO save(ComposantDTO composantDTO) {
@@ -54,8 +46,8 @@ public class ComposantServiceImpl implements ComposantService {
                     if (composantDTO.lastStatus() != null) {
                         existingComposant.setLastStatus(composantDTO.lastStatus());
                     }
-                    if (composantDTO.isDeleted()) {
-                        existingComposant.setDeleted(composantDTO.isDeleted());
+                    if (composantDTO.isdeleted()) {
+                        existingComposant.setIsdeleted(composantDTO.isdeleted());
                     }
                     if (composantDTO.status()!= null) {
                         existingComposant.setStatus(composantDTO.status());

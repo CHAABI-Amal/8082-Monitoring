@@ -1,9 +1,8 @@
 package com.chaabiamal.springboot_cassandra_demo.controller;
+
 import com.chaabiamal.springboot_cassandra_demo.Exception.ResourceNotFoundException;
 import com.chaabiamal.springboot_cassandra_demo.model.Composant;
-import com.chaabiamal.springboot_cassandra_demo.model.historiqueComposant;
 import com.chaabiamal.springboot_cassandra_demo.repository.ComposantRepository;
-import com.chaabiamal.springboot_cassandra_demo.repository.historiqueComposantRepository;
 import com.chaabiamal.springboot_cassandra_demo.service.ComposantService;
 import com.chaabiamal.springboot_cassandra_demo.service.dto.ComposantDTO;
 import com.chaabiamal.springboot_cassandra_demo.service.mapper.ComposantMapper;
@@ -11,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -27,8 +27,6 @@ public class ComposantController {
     private final ComposantService composantService;
     @Autowired
     private ComposantRepository composantRepository;
-    @Autowired
-    private historiqueComposantRepository historiquecomposantRepository;
 
     @Autowired
     private ComposantMapper composantMapper;
@@ -49,20 +47,6 @@ public class ComposantController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/manuel")
-    public List<ComposantDTO> getComposantMan() {
-        List<Composant> composants = composantRepository.findwithoutHistorique();
-
-        return composants.stream()
-                .map(composant -> {
-                    historiqueComposant historique = historiquecomposantRepository.findByid(composantRepository.findhistoriqueID()); // Recherche de l'historique par l'UUID
-                    System.out.println("((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((((("+historique.getId());
-                    composant.setHistorique(historique);
-                    ComposantDTO composantDTO = composantMapper.toDto(composant);
-                    return composantDTO;
-                })
-                .collect(Collectors.toList());
-    }
 
     @PostMapping("")
     public ResponseEntity<ComposantDTO> addComposant(@Valid @RequestBody ComposantDTO composantDTO) throws URISyntaxException {
@@ -82,14 +66,6 @@ public class ComposantController {
         Composant composant = composantRepository.findById(composantId).orElseThrow(
                 () -> new ResourceNotFoundException("Composant not found" + composantId)); // Utilisation de composantRepository
         ComposantDTO composantDTO = composantMapper.toDto(composant); // Utilisation de composantMapper
-        return ResponseEntity.ok().body(composantDTO);
-    }
-    @GetMapping("/bycode/{id}")
-    public ResponseEntity<ComposantDTO> findByCode(@PathVariable("id") String composantId) {
-        Composant composant = composantRepository.findByCode(composantId)
-                .orElseThrow(() -> new ResourceNotFoundException("Composant not found with code: " + composantId));
-
-        ComposantDTO composantDTO = composantMapper.toDto(composant);
         return ResponseEntity.ok().body(composantDTO);
     }
 

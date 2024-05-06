@@ -1,12 +1,11 @@
 package com.chaabiamal.springboot_cassandra_demo.service.impl;
+
 import com.chaabiamal.springboot_cassandra_demo.model.Composant;
 import com.chaabiamal.springboot_cassandra_demo.model.historiqueComposant;
 import com.chaabiamal.springboot_cassandra_demo.repository.historiqueComposantRepository;
 import com.chaabiamal.springboot_cassandra_demo.service.dto.historiqueComposantDTO;
 import com.chaabiamal.springboot_cassandra_demo.service.historiqueComposantService;
-
 import com.chaabiamal.springboot_cassandra_demo.service.mapper.historiqueComposantMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -62,9 +61,9 @@ public class historiqueComposantServiceImpl implements historiqueComposantServic
                                     composant.setInstanceCode(composant.getInstanceCode());
                                     composant.setAdditionalInfo(composant.getAdditionalInfo());
                                     composant.setComponentTypeId(composant.getComponentTypeId());
-                                    composant.setHistorique(composant.getHistorique());
+                                    composant.setHistoriqueComposant(composant.getHistoriqueComposant());
                                     composant.setLastStatus(composant.getLastStatus());
-                                    composant.setDeleted(composant.isDeleted());
+                                    composant.setIsdeleted(composant.isIsdeleted());
                                     return composant;
                                 })
                                 .collect(Collectors.toList());
