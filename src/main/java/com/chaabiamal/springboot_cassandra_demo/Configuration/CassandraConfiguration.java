@@ -42,10 +42,9 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
     @Bean
     @Override
     public CqlSessionFactoryBean cassandraSession() {
-        CqlSessionFactoryBean cassandraSession =
-                super.cassandraSession(); // super session should be called only once
-
-        return cassandraSession;
+        CqlSessionFactoryBean factory = new CqlSessionFactoryBean();
+        factory.setKeyspaceName(keyspaceName);
+        return factory;
     }
 }
 /*

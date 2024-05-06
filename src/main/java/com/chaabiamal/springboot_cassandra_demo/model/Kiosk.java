@@ -10,22 +10,22 @@ public class Kiosk {
     @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
     @CassandraType(type = CassandraType.Name.UUID)
     private UUID kioskId;
-    @Column("Value")
+    @Column("Name")
     @CassandraType(type = CassandraType.Name.TEXT)
     private String name;
-    @Column("Value")
+    @Column("Code")
     @CassandraType(type = CassandraType.Name.TEXT)
     private String code;
-    @Column("Value")
+    @Column("IsOnline")
     @CassandraType(type = CassandraType.Name.BOOLEAN)
     private boolean isOnline;
-    @Column("Value")
+    @Column("Description")
     @CassandraType(type = CassandraType.Name.TEXT)
     private String description;
-    @Column("ipAddress")
+    @Column("IpAddress")
     @CassandraType(type = CassandraType.Name.TEXT)
-    private String ipAddress; // Modifier le type en String
-    @Column("machineName")
+    private String ipAddress;
+    @Column("MachineName")
     @CassandraType(type = CassandraType.Name.TEXT)
     private String machineName;
 

@@ -11,213 +11,187 @@ import org.springframework.data.cassandra.core.mapping.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.UUID;
+
 @JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "id",
-        scope = Composant.class)
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "id",
+		scope = Composant.class)
 @Table(value = "composant")
 public class Composant implements Serializable {
-    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
-    @CassandraType(type = CassandraType.Name.UUID)
-    private UUID id;
-    @Column("historiqueId")
-    @CassandraType(type = CassandraType.Name.UDT,userTypeName = "historiqueComposant")
-    private historiqueComposant historique; // Cette variable sera utilisée pour la liaison avec HistoriqueComposant
-    @Column("status")
-    @CassandraType(type = CassandraType.Name.UUID)
-    private UUID status;//??? mnba3d
-    @Column("additionalInfo")
-    @CassandraType(type = CassandraType.Name.TEXT)
-    private String additionalInfo;
-    @Column("lastStatusChangeTime")
-    @CassandraType(type = CassandraType.Name.TIMESTAMP)
-    private LocalDateTime lastStatusChangeTime;
-    @Column("lastStatus")
-    @CassandraType(type = CassandraType.Name.TEXT)
-    private String lastStatus;
-    @Column("instanceCode")
-    @CassandraType(type = CassandraType.Name.TEXT)
-    private String instanceCode;
-    @Column("kioskId")
-    @CassandraType(type = CassandraType.Name.UUID)
-    private UUID kioskId;
-    @Column("instanceName")
-    @CassandraType(type = CassandraType.Name.TEXT)
-    private String instanceName;
-    @Column("componentTypeId")
-    @CassandraType(type = CassandraType.Name.INT)
-    private Integer componentTypeId;
-    @Column("modelNumber")
-    @CassandraType(type = CassandraType.Name.TEXT)
-    private String modelNumber;
-    @Column("componentStatus")
-    @CassandraType(type = CassandraType.Name.TEXT)
-    private String componentStatus;
-    @Column("statusDate")
-    @CassandraType(type = CassandraType.Name.TIMESTAMP)
-    private LocalDateTime statusDate;
-    @Column("isDeleted")
-    @CassandraType(type = CassandraType.Name.BOOLEAN)
-    private boolean isDeleted;
-    // cluster key, so we can get automatically sorted data
-    //@PrimaryKeyColumn(ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING, value = "created_at")
-    @Column("createdDate")
-    @CassandraType(type = CassandraType.Name.TIMESTAMP)
-    private LocalDateTime createdDate;
-    @Column("modifiedDate")
-    @CassandraType(type = CassandraType.Name.TIMESTAMP)
-    private LocalDateTime modifiedDate;
-//****************************************
-    // Constructeur
-    public Composant() {
-        this.id = UUID.randomUUID();
-    }
+	@PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
+	@CassandraType(type = CassandraType.Name.UUID)
+	private UUID id = UUID.randomUUID();
 
-    public Composant(UUID id, historiqueComposant historique, UUID  status, String additionalInfo, LocalDateTime lastStatusChangeTime, String lastStatus, String instanceCode, UUID kioskId, String instanceName, Integer componentTypeId, String modelNumber, String componentStatus, LocalDateTime statusDate, boolean isDeleted, LocalDateTime createdDate, LocalDateTime modifiedDate) {
-        System.out.println("Additional Info received: " + additionalInfo); // Debugging log
-        this.id = id;
-        this.historique = historique;
-        this.status = status;
-        this.additionalInfo = additionalInfo;
-        this.lastStatusChangeTime = lastStatusChangeTime;
-        this.lastStatus = lastStatus;
-        this.instanceCode = instanceCode;
-        this.kioskId = kioskId;
-        this.instanceName = instanceName;
-        this.componentTypeId = componentTypeId;
-        this.modelNumber = modelNumber;
-        this.componentStatus = componentStatus;
-        this.statusDate = statusDate;
-        this.isDeleted = isDeleted;
-        this.createdDate = createdDate;
-        this.modifiedDate = modifiedDate;
-    }
+	@Transient
+	private historiqueComposant historiqueComposant;
 
-    public UUID getId() {
-        return id;
-    }
+	@Column("status")
+	@CassandraType(type = CassandraType.Name.UUID)
+	private UUID status;//??? mnba3d
+	@Column("additionalInfo")
+	@CassandraType(type = CassandraType.Name.TEXT)
+	private String additionalInfo;
+	@Column("lastStatusChangeTime")
+	@CassandraType(type = CassandraType.Name.TIMESTAMP)
+	private LocalDateTime lastStatusChangeTime;
+	@Column("lastStatus")
+	@CassandraType(type = CassandraType.Name.TEXT)
+	private String lastStatus;
+	@Column("instanceCode")
+	@CassandraType(type = CassandraType.Name.TEXT)
+	private String instanceCode;
+	@Column("kioskId")
+	@CassandraType(type = CassandraType.Name.UUID)
+	private UUID kioskId;
+	@Column("instanceName")
+	@CassandraType(type = CassandraType.Name.TEXT)
+	private String instanceName;
+	@Column("componentTypeId")
+	@CassandraType(type = CassandraType.Name.INT)
+	private Integer componentTypeId;
+	@Column("modelNumber")
+	@CassandraType(type = CassandraType.Name.TEXT)
+	private String modelNumber;
+	@Column("componentStatus")
+	@CassandraType(type = CassandraType.Name.TEXT)
+	private String componentStatus;
+	@Column("statusDate")
+	@CassandraType(type = CassandraType.Name.TIMESTAMP)
+	private LocalDateTime statusDate;
+	@Column("isDeleted")
+	@CassandraType(type = CassandraType.Name.BOOLEAN)
+	private boolean isDeleted;
+	// cluster key, so we can get automatically sorted data
+	//@PrimaryKeyColumn(ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING, value = "created_at")
+	@Column("createdDate")
+	@CassandraType(type = CassandraType.Name.TIMESTAMP)
+	private LocalDateTime createdDate;
+	@Column("modifiedDate")
+	@CassandraType(type = CassandraType.Name.TIMESTAMP)
+	private LocalDateTime modifiedDate;
 
-    public void setId(UUID id) {
-        this.id = id;
-    }
+	//****************************************
+	// Constructeur
+	public Composant() {
+	}
 
-    public historiqueComposant getHistorique() {
-        return historique;
-    }
+	public Composant(UUID id, historiqueComposant historique, UUID status, String additionalInfo, LocalDateTime lastStatusChangeTime, String lastStatus, String instanceCode, UUID kioskId, String instanceName, Integer componentTypeId, String modelNumber, String componentStatus, LocalDateTime statusDate, boolean isDeleted, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+		System.out.println("Additional Info received: " + additionalInfo); // Debugging log
+		this.id = id;
+		this.historiqueComposant = historique;
+		this.status = status;
+		this.additionalInfo = additionalInfo;
+		this.lastStatusChangeTime = lastStatusChangeTime;
+		this.lastStatus = lastStatus;
+		this.instanceCode = instanceCode;
+		this.kioskId = kioskId;
+		this.instanceName = instanceName;
+		this.componentTypeId = componentTypeId;
+		this.modelNumber = modelNumber;
+		this.componentStatus = componentStatus;
+		this.statusDate = statusDate;
+		this.isDeleted = isDeleted;
+		this.createdDate = createdDate;
+		this.modifiedDate = modifiedDate;
+	}
 
-    public void setHistorique(historiqueComposant historique) {
-        this.historique = historique;
-    }
+	public UUID getId() {
+		return id;
+	}
 
-    public UUID  getStatus() {
-        return status;
-    }
+	public void setId(UUID id) {
+		this.id = id;
+	}
 
-    public void setStatus(UUID status) {
-        this.status = status;
-    }
+	public historiqueComposant getHistorique() {
+		return historiqueComposant;
+	}
 
-    public String getAdditionalInfo() {
-        return additionalInfo;
-    }
+	public void setHistorique(historiqueComposant historique) {
+		this.historiqueComposant = historique;
+	}
 
-    public void setAdditionalInfo(String additionalInfo) {
-        this.additionalInfo = additionalInfo;
-    }
+	public UUID getStatus() {
+		return status;
+	}
 
-    public LocalDateTime getLastStatusChangeTime() {
-        return lastStatusChangeTime;
-    }
+	public void setStatus(UUID status) {
+		this.status = status;
+	}
 
-    public void setLastStatusChangeTime(LocalDateTime lastStatusChangeTime) {
-        this.lastStatusChangeTime = lastStatusChangeTime;
-    }
+	public String getAdditionalInfo() {
+		return additionalInfo;
+	}
 
-    public String getLastStatus() {
-        return lastStatus;
-    }
+	public void setAdditionalInfo(String additionalInfo) {
+		this.additionalInfo = additionalInfo;
+	}
 
-    public void setLastStatus(String lastStatus) {
-        this.lastStatus = lastStatus;
-    }
+	public LocalDateTime getLastStatusChangeTime() {
+		return lastStatusChangeTime;
+	}
 
-    public String getInstanceCode() {
-        return instanceCode;
-    }
+	public void setLastStatusChangeTime(LocalDateTime lastStatusChangeTime) {
+		this.lastStatusChangeTime = lastStatusChangeTime;
+	}
 
-    public void setInstanceCode(String instanceCode) {
-        this.instanceCode = instanceCode;
-    }
+	public String getLastStatus() {
+		return lastStatus;
+	}
 
-    public UUID getKioskId() {
-        return kioskId;
-    }
+	public void setLastStatus(String lastStatus) {
+		this.lastStatus = lastStatus;
+	}
 
-    public void setKioskId(UUID kioskId) {
-        this.kioskId = kioskId;
-    }
+	public String getInstanceCode() {
+		return instanceCode;
+	}
 
-    public String getInstanceName() {
-        return instanceName;
-    }
+	public void setInstanceCode(String instanceCode) {
+		this.instanceCode = instanceCode;
+	}
 
-    public void setInstanceName(String instanceName) {
-        this.instanceName = instanceName;
-    }
+	public void setKioskId(UUID kioskId) {
+		this.kioskId = kioskId;
+	}
 
-    public Integer getComponentTypeId() {
-        return componentTypeId;
-    }
+	public void setInstanceName(String instanceName) {
+		this.instanceName = instanceName;
+	}
 
-    public void setComponentTypeId(Integer componentTypeId) {
-        this.componentTypeId = componentTypeId;
-    }
+	public void setComponentTypeId(Integer componentTypeId) {
+		this.componentTypeId = componentTypeId;
+	}
 
-    public String getModelNumber() {
-        return modelNumber;
-    }
+	public void setModelNumber(String modelNumber) {
+		this.modelNumber = modelNumber;
+	}
 
-    public void setModelNumber(String modelNumber) {
-        this.modelNumber = modelNumber;
-    }
+	public void setComponentStatus(String componentStatus) {
+		this.componentStatus = componentStatus;
+	}
 
-    public String getComponentStatus() {
-        return componentStatus;
-    }
+	public void setStatusDate(LocalDateTime statusDate) {
+		this.statusDate = statusDate;
+	}
 
-    public void setComponentStatus(String componentStatus) {
-        this.componentStatus = componentStatus;
-    }
+	public void setDeleted(boolean deleted) {
+		isDeleted = deleted;
+	}
 
-    public LocalDateTime getStatusDate() {
-        return statusDate;
-    }
+	public void setCreatedDate(LocalDateTime createdDate) {
+		this.createdDate = createdDate;
+	}
 
-    public void setStatusDate(LocalDateTime statusDate) {
-        this.statusDate = statusDate;
-    }
+	public void setModifiedDate(LocalDateTime modifiedDate) {
+		this.modifiedDate = modifiedDate;
+	}
 
-    public boolean isDeleted() {
-        return isDeleted;
-    }
+	public Integer getComponentTypeId() {
+		return componentTypeId;
+	}
 
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
-    }
-
-    public LocalDateTime getCreatedDate() {
-        return createdDate;
-    }
-
-    public void setCreatedDate(LocalDateTime createdDate) {
-        this.createdDate = createdDate;
-    }
-
-    public LocalDateTime getModifiedDate() {
-        return modifiedDate;
-    }
-
-    public void setModifiedDate(LocalDateTime modifiedDate) {
-        this.modifiedDate = modifiedDate;
-    }
+	public boolean isDeleted() {
+		return isDeleted;
+	}
 }

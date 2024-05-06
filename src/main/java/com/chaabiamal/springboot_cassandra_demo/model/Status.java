@@ -7,52 +7,54 @@ import org.springframework.data.cassandra.core.mapping.*;
 
 import java.io.Serializable;
 import java.util.UUID;
+
 @JsonIdentityInfo(
-        generator = ObjectIdGenerators.PropertyGenerator.class,
-        property = "ID",
-        scope = Status.class)
-@Table(value ="status")
+		generator = ObjectIdGenerators.PropertyGenerator.class,
+		property = "ID",
+		scope = Status.class)
+@Table(value = "status")
 
 public class Status implements Serializable {
-    @PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
-    @Column("id")
-    @CassandraType(type = CassandraType.Name.UUID)
-        private int ID;
-        @Column("Value")
-        @CassandraType(type = CassandraType.Name.TEXT)
+	@PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
+	@Column("id")
+	@CassandraType(type = CassandraType.Name.UUID)
+	private int ID;
 
-        private String Value;
-        @Column("Description")
-        @CassandraType(type = CassandraType.Name.TEXT)
-        private String Description;
+	@Column("Value")
+	@CassandraType(type = CassandraType.Name.TEXT)
+	private String Value;
+
+	@Column("Description")
+	@CassandraType(type = CassandraType.Name.TEXT)
+	private String Description;
 
 
 //*******************************************
 
 
-    public int getID() {
-        return ID;
-    }
+	public int getID() {
+		return ID;
+	}
 
-    public void setID(int ID) {
-        this.ID = ID;
-    }
+	public void setID(int ID) {
+		this.ID = ID;
+	}
 
-    public String getValue() {
-        return Value;
-    }
+	public String getValue() {
+		return Value;
+	}
 
-    public void setValue(String value) {
-        Value = value;
-    }
+	public void setValue(String value) {
+		Value = value;
+	}
 
-    public String getDescription() {
-        return Description;
-    }
+	public String getDescription() {
+		return Description;
+	}
 
-    public void setDescription(String description) {
-        Description = description;
-    }
+	public void setDescription(String description) {
+		Description = description;
+	}
 
 
-    }
+}
