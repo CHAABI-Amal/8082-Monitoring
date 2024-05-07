@@ -53,21 +53,11 @@ public class historiqueComposantServiceImpl implements historiqueComposantServic
                         existingComposant.setId(historiqueComposantDTO.id());
                     }
 
-                    if (historiqueComposantDTO.composants() != null) {
-                        List<Composant> composants = historiqueComposantDTO.composants().stream()
-                                .map(composantDTO -> {
-                                    Composant composant = new Composant();
-                                    composant.setId(composantDTO.id());
-                                    composant.setInstanceCode(composant.getInstanceCode());
-                                    composant.setAdditionalInfo(composant.getAdditionalInfo());
-                                    composant.setComponentTypeId(composant.getComponentTypeId());
-                                    composant.setHistoriqueComposant(composant.getHistoriqueComposant());
-                                    composant.setLastStatus(composant.getLastStatus());
-                                    composant.setIsdeleted(composant.isIsdeleted());
-                                    return composant;
-                                })
-                                .collect(Collectors.toList());
-                        existingComposant.setComposants(composants);
+                    if (historiqueComposantDTO.composantId() != null) {
+                        existingComposant.setComposantId(historiqueComposantDTO.composantId());
+                    }
+                    if (historiqueComposantDTO.date()!= null) {
+                        existingComposant.setDate(historiqueComposantDTO.date());
                     }
                     historiqueComposant updatedComposant = historiquecomposantRepository.save(existingComposant);
                     return historiquecomposantMapper.toDto(updatedComposant);
@@ -89,6 +79,6 @@ public class historiqueComposantServiceImpl implements historiqueComposantServic
     @Override
     public void delete(UUID id) {
 
-        historiquecomposantRepository.deleteById(id);
+        historiquecomposantRepository.deleteByid(id);
     }
 }

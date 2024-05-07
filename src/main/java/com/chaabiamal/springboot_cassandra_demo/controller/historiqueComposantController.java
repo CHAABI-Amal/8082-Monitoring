@@ -1,7 +1,9 @@
 package com.chaabiamal.springboot_cassandra_demo.controller;
 import com.chaabiamal.springboot_cassandra_demo.Exception.ResourceNotFoundException;
+import com.chaabiamal.springboot_cassandra_demo.model.Composant;
 import com.chaabiamal.springboot_cassandra_demo.model.historiqueComposant;
 import com.chaabiamal.springboot_cassandra_demo.repository.historiqueComposantRepository;
+import com.chaabiamal.springboot_cassandra_demo.service.dto.ComposantDTO;
 import com.chaabiamal.springboot_cassandra_demo.service.dto.historiqueComposantDTO;
 import com.chaabiamal.springboot_cassandra_demo.service.historiqueComposantService;
 import com.chaabiamal.springboot_cassandra_demo.service.mapper.historiqueComposantMapper;
@@ -23,23 +25,23 @@ import static org.springframework.boot.web.servlet.filter.ApplicationContextHead
 
 public class historiqueComposantController {
     @Autowired
-    private final historiqueComposantService composantService;
+    private final historiqueComposantService historiquecomposantService;
     @Autowired
-    private historiqueComposantRepository composantRepository;
+    private historiqueComposantRepository historiquecomposantRepository;
 
     @Autowired
-    private historiqueComposantMapper composantMapper;
+    private historiqueComposantMapper historiquecomposantMapper;
 
     @Autowired
-    public historiqueComposantController(historiqueComposantService composantService) {
-        this.composantService = composantService;
+    public historiqueComposantController(historiqueComposantService historiquecomposantService) {
+        this.historiquecomposantService = historiquecomposantService;
     }
     @PostMapping("")
     public ResponseEntity<historiqueComposantDTO> addHistoriqueComposant(@Valid @RequestBody historiqueComposantDTO historiqueComposantDTO) throws URISyntaxException {
-        historiqueComposant historiqueComposant = composantMapper.toEntity(historiqueComposantDTO);
+        historiqueComposant historiqueComposant = historiquecomposantMapper.toEntity(historiqueComposantDTO);
         historiqueComposant.setId(UUID.randomUUID());
-        historiqueComposant savedHistoriqueComposant = composantRepository.save(historiqueComposant);
-        historiqueComposantDTO savedHistoriqueComposantDTO = composantMapper.toDto(savedHistoriqueComposant);
+        historiqueComposant savedHistoriqueComposant = historiquecomposantRepository.save(historiqueComposant);
+        historiqueComposantDTO savedHistoriqueComposantDTO = historiquecomposantMapper.toDto(savedHistoriqueComposant);
 
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -49,23 +51,38 @@ public class historiqueComposantController {
 
     @GetMapping("{id}")
     public ResponseEntity<historiqueComposantDTO> findById(@PathVariable("id") UUID historiqueComposantId) {
-        historiqueComposant historiqueComposant = composantRepository.findById(historiqueComposantId).orElseThrow(
+        historiqueComposant historiqueComposant = historiquecomposantRepository.findByid(historiqueComposantId).orElseThrow(
                 () -> new ResourceNotFoundException("HistoriqueComposant not found" + historiqueComposantId));
-        historiqueComposantDTO historiqueComposantDTO = composantMapper.toDto(historiqueComposant);
+        historiqueComposantDTO historiqueComposantDTO = historiquecomposantMapper.toDto(historiqueComposant);
         return ResponseEntity.ok().body(historiqueComposantDTO);
+    }
+
+    @GetMapping("/historique/{id}")
+    public ResponseEntity<List<historiqueComposantDTO>> findByIdComposant(@PathVariable("id") UUID ComposantId) {
+        List<historiqueComposant> historiqueComposants = historiquecomposantRepository.findByidComposant(ComposantId);
+
+        if (historiqueComposants.isEmpty()) {
+            throw new ResourceNotFoundException("HistoriqueComposant not found with ComposantId: " + ComposantId);
+        }
+
+        List<historiqueComposantDTO> historiqueComposantDTOs = historiqueComposants.stream()
+                .map(historiquecomposantMapper::toDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(historiqueComposantDTOs);
     }
 
     @GetMapping("")
     public List<historiqueComposantDTO> getHistoriqueComposants() {
-        List<historiqueComposant> historiqueComposants = composantRepository.findAll();
+        List<historiqueComposant> historiqueComposants = historiquecomposantRepository.findAll();
         return historiqueComposants.stream()
-                .map(composantMapper::toDto)
+                .map(historiquecomposantMapper::toDto)
                 .collect(Collectors.toList());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteHistoriqueComposant(@PathVariable("id") UUID historiqueComposantId) {
-        composantService.delete(historiqueComposantId);
+        historiquecomposantService.delete(historiqueComposantId);
         return ResponseEntity.ok().build();
     }
 }

@@ -5,6 +5,7 @@ import com.chaabiamal.springboot_cassandra_demo.repository.ComposantRepository;
 import com.chaabiamal.springboot_cassandra_demo.service.ComposantService;
 import com.chaabiamal.springboot_cassandra_demo.service.dto.ComposantDTO;
 import com.chaabiamal.springboot_cassandra_demo.service.mapper.ComposantMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -15,9 +16,16 @@ import java.util.UUID;
 
 @Service
 public class ComposantServiceImpl implements ComposantService {
-
+    @Autowired
     private  ComposantRepository composantRepository;
+    @Autowired
     private ComposantMapper composantMapper;
+    @Autowired
+    public ComposantServiceImpl(ComposantRepository composantRepository) {
+        this.composantRepository = composantRepository;
+    }
+
+
 
 
     @Override
@@ -101,9 +109,9 @@ public class ComposantServiceImpl implements ComposantService {
         return composantRepository.findById(id).map(composantMapper::toDto);
     }
 
-    @Override
-    public void delete(UUID id) {
 
-        composantRepository.deleteById(id);
+    @Override
+    public void delete(UUID composantId) {
+        composantRepository.deleteByid(composantId);
     }
 }

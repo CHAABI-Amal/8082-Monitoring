@@ -10,16 +10,82 @@ import org.springframework.data.cassandra.config.AbstractCassandraConfiguration;
 import org.springframework.data.cassandra.config.CqlSessionFactoryBean;
 import org.springframework.data.cassandra.config.SchemaAction;
 import org.springframework.data.cassandra.core.CassandraTemplate;
+import org.springframework.data.cassandra.core.convert.CassandraConverter;
+import org.springframework.data.cassandra.core.convert.CassandraCustomConversions;
+import org.springframework.data.cassandra.core.convert.MappingCassandraConverter;
 import org.springframework.data.cassandra.core.cql.keyspace.CreateKeyspaceSpecification;
+import org.springframework.data.cassandra.core.cql.keyspace.KeyspaceOption;
+import org.springframework.data.cassandra.core.mapping.BasicCassandraMappingContext;
 import org.springframework.data.cassandra.repository.config.EnableCassandraRepositories;
 
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 
 @Configuration
 @EnableCassandraRepositories(basePackages = {"com.chaabiamal.springboot_cassandra_demo.repository"})
 public class CassandraConfiguration extends AbstractCassandraConfiguration {
+//********************************************************************************************
+@Value("${spring.data.cassandra.keyspace-name:mykeyspace}")
+private String keyspaceName;
 
+    @Value("${spring.data.cassandra.contact-points:localhost}")
+    private String contactPoints;
+
+    @Value("${spring.data.cassandra.port:9042}")
+    private int port;
+
+    @Bean
+    public CqlSessionFactoryBean cassandraSession() {
+        CqlSessionFactoryBean factory = new CqlSessionFactoryBean();
+        factory.setKeyspaceName(getKeyspaceName());
+        return factory;
+    }
+
+    @Bean
+    public CassandraConverter cassandraConverter() {
+        return new MappingCassandraConverter(new BasicCassandraMappingContext());
+    }
+
+
+    @Override
+    public String getContactPoints() {
+        return contactPoints;
+    }
+
+    @Override
+    protected int getPort() {
+        return port;
+    }
+
+    @Override
+    public SchemaAction getSchemaAction() {
+        return SchemaAction.CREATE_IF_NOT_EXISTS;
+    }
+
+    @Override
+    protected String getKeyspaceName() {
+        return keyspaceName;
+    }
+
+    @Override
+    public String[] getEntityBasePackages() {
+        return new String[]{"com.chaabiamal.springboot_cassandra_demo.model"};
+    }
+
+    @Bean
+    @Primary
+    public CqlSession session() {
+        return CqlSession.builder()
+                .withKeyspace(getKeyspaceName())
+                .withLocalDatacenter("datacenter1") // Définir le centre de données local
+                .build();
+    }
+    @Bean
+    public CassandraTemplate mycassandraTemplate() {
+        return new CassandraTemplate(session());
+    }
+    /*
     @Value("${env.values.cassandra.keyspace.name}")
     private String keyspaceName;
 
@@ -48,6 +114,8 @@ public class CassandraConfiguration extends AbstractCassandraConfiguration {
         factory.setKeyspaceName(keyspaceName);
         return factory;
     }
+    */
+
 }
 /*/*
 @Configuration
