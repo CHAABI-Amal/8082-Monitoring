@@ -103,6 +103,7 @@ public class ComposantController {
         ComposantDTO composantDTO=null;
         if(!composant.getLastStatus().equals(status)){
             System.out.println("status has changed");
+
             //**********************************************
             historiqueComposant historiquecomposant = new historiqueComposant(); // Create a new instance
             // Set properties of historiquecomposant
