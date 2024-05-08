@@ -23,9 +23,9 @@ public class Composant implements Serializable {
 	@Column(value = "id")
 	private UUID id;
 
-	@CassandraType(type = CassandraType.Name.UUID)
+	@CassandraType(type = CassandraType.Name.INT)
 	@Column(value = "status")
-	private UUID status;
+	private int status;
 
 	@CassandraType(type = CassandraType.Name.TEXT)
 	@Column(value = "additionalinfo")
@@ -84,7 +84,7 @@ public class Composant implements Serializable {
 	public Composant() {
 	}
 
-	public Composant(UUID id,  UUID status, String additionalInfo, LocalDateTime lastStatusChangeTime, String lastStatus, String instanceCode, UUID kioskId, String instanceName, Integer componentTypeId, String modelNumber, String componentStatus, LocalDateTime statusDate, boolean isdeleted, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+	public Composant(UUID id,  int status, String additionalInfo, LocalDateTime lastStatusChangeTime, String lastStatus, String instanceCode, UUID kioskId, String instanceName, Integer componentTypeId, String modelNumber, String componentStatus, LocalDateTime statusDate, boolean isdeleted, LocalDateTime createdDate, LocalDateTime modifiedDate) {
 		this.id = id;
 
 		this.status = status;
@@ -111,11 +111,11 @@ public class Composant implements Serializable {
 		this.id = id;
 	}
 
-	public UUID getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
-	public void setStatus(UUID status) {
+	public void setStatus(int status) {
 		this.status = status;
 	}
 

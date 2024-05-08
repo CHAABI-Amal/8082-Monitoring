@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public record ComposantDTO(
         UUID id,
-        UUID  status,
+        int  status,
         String additionalInfo,
         LocalDateTime lastStatusChangeTime,
         String lastStatus,

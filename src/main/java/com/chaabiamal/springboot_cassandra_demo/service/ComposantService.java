@@ -9,6 +9,9 @@ import java.util.UUID;
 
 public interface ComposantService {
 
+    //****************************
+    Optional<ComposantDTO> findById(UUID id);
+
     ComposantDTO save(ComposantDTO kioskDTO);
 
     ComposantDTO update(ComposantDTO kioskDTO);
@@ -22,4 +25,5 @@ public interface ComposantService {
     void delete(UUID id);
 
 
+    String checkAdditionalInfo(String additionalInfo, String addinfo);
 }

@@ -19,4 +19,9 @@ public interface ComposantRepository extends CassandraRepository<Composant, UUID
 
     @Query("DELETE FROM mykeyspace.composant WHERE id = ?0")
     void deleteByid(UUID id);
+
+    @Query("SELECT value FROM mykeyspace.status WHERE id = ?0 ALLOW FILTERING")
+    String findLastStatusByStatusID(int id);
+    @Query("SELECT lastStatus FROM mykeyspace.composant WHERE id = ?0 ALLOW FILTERING")
+    String findLastStatusBycomposantID(UUID id);
 }
