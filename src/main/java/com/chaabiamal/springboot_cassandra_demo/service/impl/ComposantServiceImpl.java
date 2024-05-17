@@ -1,15 +1,24 @@
 package com.chaabiamal.springboot_cassandra_demo.service.impl;
 
+import com.chaabiamal.springboot_cassandra_demo.Exception.ResourceNotFoundException;
 import com.chaabiamal.springboot_cassandra_demo.model.Composant;
+import com.chaabiamal.springboot_cassandra_demo.model.historiqueComposant;
 import com.chaabiamal.springboot_cassandra_demo.repository.ComposantRepository;
+import com.chaabiamal.springboot_cassandra_demo.repository.historiqueComposantRepository;
 import com.chaabiamal.springboot_cassandra_demo.service.ComposantService;
 import com.chaabiamal.springboot_cassandra_demo.service.dto.ComposantDTO;
+import com.chaabiamal.springboot_cassandra_demo.service.dto.historiqueComposantDTO;
+import com.chaabiamal.springboot_cassandra_demo.service.historiqueComposantService;
 import com.chaabiamal.springboot_cassandra_demo.service.mapper.ComposantMapper;
+import com.chaabiamal.springboot_cassandra_demo.service.mapper.historiqueComposantMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -20,81 +29,63 @@ public class ComposantServiceImpl implements ComposantService {
     private  ComposantRepository composantRepository;
     @Autowired
     private ComposantMapper composantMapper;
+    //************************88
+    @Autowired
+    private historiqueComposantService historiquecomposantService;
+    @Autowired
+    private historiqueComposantRepository historiquecomposantRepository;
+
+    @Autowired
+    private historiqueComposantMapper historiquecomposantMapper;
     @Autowired
     public ComposantServiceImpl(ComposantRepository composantRepository) {
         this.composantRepository = composantRepository;
     }
 
+    public ResponseEntity<String> findByIdCheckaddInfo( UUID composantId,
+                                                       int value) {
+        Composant composant = composantRepository.findComposantById(composantId).orElseThrow(
+                () -> new ResourceNotFoundException("Composant not found with ID: " + composantId));
 
-//**********************
+        // Supprimer le dernier caractère '%' de la valeur du composant
+        // String valueString = composantValue.substring(0, composantValue.length() - 1);
+
+        try {
 
 
-    public String checkAdditionalInfo(String additionalInfo, String valueToCheck) {
-        if (additionalInfo == null || valueToCheck == null) {
-            return "AdditionalInfo or valueToCheck is null";
-        }
-        String[] valuesToCheck = valueToCheck.split(",");
-        int index = valueToCheck.indexOf(",");
-        valueToCheck= valueToCheck.substring(index + 1);
-        if(index<0) valueToCheck=null;
-        for (String value : valuesToCheck) {
-            String[] keyValue = value.split(":");
-            String value1 = keyValue[0].trim();
-            if (additionalInfo.contains(value1)) {
-                return checkValue(additionalInfo, value, valueToCheck);
-            }
-        }
-        return "None of the specified values found in AdditionalInfo";
-    }
+            // Vérifier si la valeur est inférieure à 20% ou supérieure à 80%
+            if (value <= 20 || value >= 80) {
+                //**************************************** si inf 20 & sup 80 *******************************************************
+                historiqueComposant historiquecomposant = new historiqueComposant(); // Create a new instance
+                // Set properties of historiquecomposant
+                historiquecomposant.setId(UUID.randomUUID());
+                historiquecomposant.setComposantId(composantId);
+                historiquecomposant.setDatetime(LocalDateTime.now());
+                historiquecomposant.setStatus(composant.getLastStatus());
+                historiquecomposant.setValue(composant.getValue());
+                //ajouter champs additionalInfo;
+                historiqueComposant savedHistoriqueComposant = historiquecomposantRepository.save(historiquecomposant);
+                historiqueComposantDTO savedHistoriqueComposantDTO = historiquecomposantMapper.toDto(savedHistoriqueComposant);
 
-    private String checkValue(String additionalInfo, String valueToCheck,String reste) {
-        int check=0;
-        String[] parts = additionalInfo.split(",valueToCheck");
-        for (String part : parts) {
-
-            String[] keyValue1 = part.split(":");
-            String key1 = keyValue1[0].trim();
-            //***
-            String[] keyValue2 = valueToCheck.split(":");
-            String key2 = keyValue2[0].trim();
-            if (key1.contains(key2)) {
-                String value = keyValue2[1].trim();
-                try {
-                    int intValue = Integer.parseInt(value);
-                    if (valueToCheck.equals("RAM") || valueToCheck.equals("CPU")) {
-                        if (intValue < 20) {
-                            System.out.println(valueToCheck + " usage is less than 20%"); ;
-                            check=1;
-                        } else if (intValue > 80) {
-                            System.out.println(valueToCheck + " usage is more than 80%");check=2;
-
-                        } else {
-                            System.out.println(valueToCheck + " usage is within acceptable range");check=3;
-                        }
-                    } else if (key1.equals("C") || key1.equals("D")) {
-                        // Assuming it's disk usage, same logic as RAM and CPU
-                        if (intValue < 20) {
-                            System.out.println(valueToCheck + " disk usage is less than 20%");check=4;
-                        } else if (intValue > 80) {
-                            System.out.println(valueToCheck + " disk usage is more than 80%");check=5;
-                        } else {
-                            System.out.println(valueToCheck + " disk usage is within acceptable range");check=6;
-                        }
-                    }
-                } catch (NumberFormatException e) {
-                    // Not a valid integer value
-                    System.out.println("Invalid value format in AdditionalInfo");check=7;
+                //***********************
+                composant.setValue(value+"%");
+                composantRepository.save(composant); // Mettre à jour la valeur du composant
+                if (value <= 20) {
+                    return ResponseEntity.ok("La valeur du composant est inférieure à 20%");
+                } else {
+                    return ResponseEntity.ok("La valeur du composant est supérieure à 80%");
                 }
-                checkAdditionalInfo(part,reste);
+            } else {
+                composant.setValue(value+"%");
+                composantRepository.save(composant); // Mettre à jour la valeur du composant
+                return ResponseEntity.ok("La valeur du composant est dans la plage acceptable entre 20% et 80%");
             }
+
+        } catch (NumberFormatException e) {
+            // En cas d'erreur lors de la conversion ou si la valeur n'est pas un pourcentage valide
+            return ResponseEntity.badRequest().body("La valeur du composant n'est pas un pourcentage valide");
         }
-        if(check==0) {
-            return "Value not found in AdditionalInfo";
-        }
-        return check+"done check";
     }
-
-
 
    //****************************
    @Override
@@ -127,41 +118,39 @@ public class ComposantServiceImpl implements ComposantService {
                     if (composantDTO.lastStatus() != null) {
                         existingComposant.setLastStatus(composantDTO.lastStatus());
                     }
-                    if (composantDTO.isdeleted()) {
-                        existingComposant.setIsdeleted(composantDTO.isdeleted());
+                    if (composantDTO.isDeleted()) {
+                        existingComposant.setDeleted(composantDTO.isDeleted());
                     }
-                    if (0<composantDTO.status()&& composantDTO.status()<5) {
-                        existingComposant.setStatus(composantDTO.status());
+                    if (0<composantDTO.statusId()&& composantDTO.statusId()<5) {
+                        existingComposant.setStatusId(composantDTO.statusId());
                     }
-                    if (composantDTO.instanceName() != null) {
-                        existingComposant.setInstanceName(composantDTO.instanceName());
+                    if (composantDTO.name() != null) {
+                        existingComposant.setName(composantDTO.name());
                     }
-                    if (composantDTO.additionalInfo() != null) {
-                        existingComposant.setAdditionalInfo(composantDTO.additionalInfo());
+                    if (composantDTO.value() != null) {
+                        existingComposant.setValue(composantDTO.value());
                     }
-                    if (composantDTO.componentTypeId() != null) {
+                    if (composantDTO.componentTypeId()>0) {
                         existingComposant.setComponentTypeId(composantDTO.componentTypeId());
                     }
-                    if (composantDTO.instanceCode() != null) {
-                        existingComposant.setInstanceCode(composantDTO.instanceCode());
+                    if (composantDTO.code() != null) {
+                        existingComposant.setCode(composantDTO.code());
                     }
-                    if (composantDTO.kioskId() != null) {
-                        existingComposant.setKioskId(composantDTO.kioskId());
+                    if (composantDTO.machineId() != null) {
+                        existingComposant.setMachineId(composantDTO.machineId());
                     }
-                    if (composantDTO.modelNumber() != null) {
-                        existingComposant.setModelNumber(composantDTO.modelNumber());
+                    if (composantDTO.model() != null) {
+                        existingComposant.setModel(composantDTO.model());
                     }
-                    if (composantDTO.componentStatus() != null) {
-                        existingComposant.setComponentStatus(composantDTO.componentStatus());
+
+                    if (composantDTO.lastStatusChangeTime() != null) {
+                        existingComposant.setLastStatusChangeTime(composantDTO.lastStatusChangeTime());
                     }
-                    if (composantDTO.statusDate() != null) {
-                        existingComposant.setStatusDate(composantDTO.statusDate());
+                    if (composantDTO.composantCreatedDate() != null) {
+                        existingComposant.setComposantCreatedDate(composantDTO.composantCreatedDate());
                     }
-                    if (composantDTO.createdDate() != null) {
-                        existingComposant.setCreatedDate(composantDTO.createdDate());
-                    }
-                    if (composantDTO.modifiedDate() != null) {
-                        existingComposant.setModifiedDate(composantDTO.modifiedDate());
+                    if (composantDTO.composantModifiedDate()!= null) {
+                        existingComposant.setComposantModifiedDate(composantDTO.composantModifiedDate());
                     }
 
                     Composant updatedComposant = composantRepository.save(existingComposant);

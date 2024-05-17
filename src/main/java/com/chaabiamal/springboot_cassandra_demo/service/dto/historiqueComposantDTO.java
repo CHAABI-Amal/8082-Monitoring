@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.UUID;
 
 public record historiqueComposantDTO(
-            UUID id,
-            UUID composantId,
-            LocalDateTime date,
-            String lastStatus
 
-    ) {}
-
+        UUID id,
+        UUID composantId,
+        String status,
+        String value,
+        LocalDateTime datetime
+) {}

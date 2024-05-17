@@ -56,8 +56,14 @@ public class historiqueComposantServiceImpl implements historiqueComposantServic
                     if (historiqueComposantDTO.composantId() != null) {
                         existingComposant.setComposantId(historiqueComposantDTO.composantId());
                     }
-                    if (historiqueComposantDTO.date()!= null) {
-                        existingComposant.setDate(historiqueComposantDTO.date());
+                    if (historiqueComposantDTO.datetime()!= null) {
+                        existingComposant.setDatetime(historiqueComposantDTO.datetime());
+                    }
+                    if (historiqueComposantDTO.status()!= null) {
+                        existingComposant.setStatus(historiqueComposantDTO.status());
+                    }
+                    if (historiqueComposantDTO.value()!= null) {
+                        existingComposant.setValue(historiqueComposantDTO.value());
                     }
                     historiqueComposant updatedComposant = historiquecomposantRepository.save(existingComposant);
                     return historiquecomposantMapper.toDto(updatedComposant);

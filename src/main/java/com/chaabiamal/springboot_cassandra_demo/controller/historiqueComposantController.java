@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -62,9 +63,12 @@ public class historiqueComposantController {
         List<historiqueComposant> historiqueComposants = historiquecomposantRepository.findByidComposant(ComposantId);
 
         if (historiqueComposants.isEmpty()) {
-            throw new ResourceNotFoundException("HistoriqueComposant not found with ComposantId: " + ComposantId);
+            // Si aucun historique n'est trouvé, renvoyer une liste vide avec un statut 200
+            List<historiqueComposantDTO> historiqueComposantDTOs = new ArrayList<>(); // Utilisation de ArrayList pour une liste vide
+            return ResponseEntity.ok().body(historiqueComposantDTOs);
         }
 
+        // Si l'historique est trouvé, mapper les objets en DTO et renvoyer la liste avec un statut 200
         List<historiqueComposantDTO> historiqueComposantDTOs = historiqueComposants.stream()
                 .map(historiquecomposantMapper::toDto)
                 .collect(Collectors.toList());
