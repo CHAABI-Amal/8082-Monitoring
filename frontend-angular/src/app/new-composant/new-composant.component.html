@@ -1,0 +1,53 @@
+<div class="container">
+  <mat-card [formGroup]="composantFormGroup" class="composant-form">
+    <mat-card-header>
+      <mat-card-title>New Composant</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+
+
+      <mat-form-field appearance="outline">
+        <mat-label>Code</mat-label>
+        <input matInput formControlName="code">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Name</mat-label>
+        <input matInput formControlName="name">
+      </mat-form-field>
+
+
+
+
+      <mat-form-field appearance="outline">
+        <mat-label>Value</mat-label>
+        <input matInput formControlName="value">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Last Status</mat-label>
+          <mat-select formControlName="lastStatus">
+            @for (t of typeStatus;track t){
+              <mat-option [value]="t">{{ t }}</mat-option>
+            }
+          </mat-select>
+      </mat-form-field>
+
+
+
+
+
+
+      <mat-form-field appearance="outline">
+        <mat-label>Model</mat-label>
+      <input matInput formControlName="model">
+      </mat-form-field>
+
+
+    </mat-card-content>
+    <mat-card-actions>
+      <button (click)="saveComposant()" mat-raised-button color="primary">Save Composant</button>
+    </mat-card-actions>
+  </mat-card>
+
+</div>

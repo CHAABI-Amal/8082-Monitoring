@@ -1,0 +1,101 @@
+<mat-toolbar class="black-toolbar">
+  <button mat-icon-button (click)="myDrawer.toggle()">
+    <mat-icon style="color: #1769aa;">menu</mat-icon>
+  </button>
+  <img class="profile-logo" src="assets/logo.png" alt="logo Picture">
+
+  <span style="flex: auto"></span>
+  <button mat-button routerLink="/admin/home" color="primary">Home</button>
+  <button mat-button routerLink="/admin/profile" color="primary">Profile</button>
+  <button color="primary" *ngIf="authService.roles.includes('ADMIN')" mat-button [matMenuTriggerFor]="importMenu">
+    <mat-icon iconPositionEnd style="color: #1769aa;">keyboard_arrow_down</mat-icon>
+    Import
+  </button>
+  <mat-menu #importMenu class="custom-menu">
+    <button mat-menu-item routerLink="/admin/loadComposants">Load composants</button>
+    <button mat-menu-item routerLink="/admin/loadHistoriques">Load Historiques</button>
+  </mat-menu>
+  <button mat-button *ngIf="authService.isAuthenfiticated" color="primary">
+    {{authService.username}}
+  </button>
+  <button mat-raised-button color="accent" (click)="logout()">
+    Logout
+  </button>
+</mat-toolbar>
+
+<mat-drawer-container>
+  <mat-drawer #myDrawer opened="true" mode="side" position="start">
+    <mat-list>
+      <mat-list-item>
+        <button mat-button routerLink="/admin/dashboard">
+          <mat-icon style="color: #1769aa;">dashboard</mat-icon>
+          Dashboard
+        </button>
+      </mat-list-item>
+
+      <mat-menu #settingsMenu="matMenu">
+        <button mat-menu-item>
+          <mat-icon style="color: #1769aa;">settings</mat-icon>
+          <span matLine><mat-icon style="color: #1769aa;">settings</mat-icon>Setting</span>
+        </button>
+        <button mat-menu-item (click)="submenu.open()">
+          <mat-icon style="color: #1769aa;">keyboard_arrow_down</mat-icon>
+        </button>
+      </mat-menu>
+
+      <mat-expansion-panel #submenu>
+        <mat-expansion-panel-header>
+
+          <mat-panel-title><mat-icon style="color: #1769aa;">settings</mat-icon>Setting</mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <div class="vertical-buttons">
+          <button mat-button routerLink="/admin/manageStatus" class="left-align">
+            <mat-icon style="color: #1769aa;">done</mat-icon>
+            <span style="margin-left: 0px;">Manage Status</span>
+          </button>
+          <button mat-button routerLink="/admin/manageTypeMachine" class="left-align">
+            <mat-icon style="color: #1769aa;">category</mat-icon>
+            <span style="margin-left: 5px;">Manage  Types </span>
+          </button>
+          <button mat-button routerLink="/admin/manageModules" class="left-align">
+            <mat-icon style="color: #1769aa;">model</mat-icon>
+            <span style="margin-left: 5px;">Manage  Modules </span>
+          </button>
+        </div>
+      </mat-expansion-panel>
+
+
+
+
+
+
+
+
+
+      <mat-list-item>
+        <button mat-button routerLink="/admin/machines">
+          <mat-icon style="color: #1769aa;">computer</mat-icon>
+          Machines
+        </button>
+      </mat-list-item>
+      <mat-list-item>
+        <button mat-button routerLink="/admin/composants">
+          <mat-icon style="color: #1769aa;">build</mat-icon>
+          Components
+        </button>
+      </mat-list-item>
+      <mat-list-item>
+        <button mat-button routerLink="/admin/historiques">
+          <mat-icon style="color: #1769aa;">history</mat-icon>
+          History
+        </button>
+      </mat-list-item>
+    </mat-list>
+  </mat-drawer>
+  <mat-drawer-content>
+    <div style="min-height:600px">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-drawer-content>
+</mat-drawer-container>

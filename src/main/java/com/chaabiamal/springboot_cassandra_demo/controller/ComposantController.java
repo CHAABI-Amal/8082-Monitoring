@@ -14,6 +14,7 @@ import com.chaabiamal.springboot_cassandra_demo.service.mapper.ComposantMapper;
 import com.chaabiamal.springboot_cassandra_demo.service.mapper.historiqueComposantMapper;
 import io.swagger.v3.core.util.Json;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -32,10 +33,10 @@ import java.util.stream.Collectors;
 import static org.springframework.boot.web.servlet.filter.ApplicationContextHeaderFilter.HEADER_NAME;
 
 @RestController
-
+@CrossOrigin("*")
 @RequestMapping("/amal/composants")
 public class ComposantController {
-    @Autowired
+
     private final ComposantService composantService;
     @Autowired
     private ComposantRepository composantRepository;
@@ -44,38 +45,189 @@ public class ComposantController {
     private ComposantMapper composantMapper;
 
     //****************************************************************************************************************
-    @Autowired
-    private  historiqueComposantService historiquecomposantService;
+
     @Autowired
     private historiqueComposantRepository historiquecomposantRepository;
 
     @Autowired
     private historiqueComposantMapper historiquecomposantMapper;
 
-    @Autowired
+
+
     private final RestTemplate restTemplate;
-
-
-
-    @Autowired
-    public ComposantController(ComposantService composantService, RestTemplate restTemplate) {
+ /**/
+@Autowired
+    public ComposantController(ComposantService composantService,RestTemplate restTemplate) {
         this.composantService = composantService;
         this.restTemplate = restTemplate;
     }
+
+
+    //******************************************* pour communiquer avec MS 1 ***************************************************888
+    private static final String COMPOSANT_URL_MS = "http://localhost:8081/";
 //*******************************************
+
+
+//**************************************************** trouver 2 composant mn setting *******************************************************************************
+    @GetMapping("/find/{nbr}")
+    public List<ComposantDTO> fetchStudents(@PathVariable int nbr) {
+        return composantService.fetchStudents(nbr);
+    }
+//*********************************************************************************************** A tester **********************************************************************88
+
+    @GetMapping("/find")
+    public List<ComposantDTO> fetchStudents() {
+        return composantService.fetchStudents();
+    }
+//*********************************************************************************************** A tester **********************************************************************88
+@GetMapping("/findId/{id}")
+public ComposantDTO fetchStudentId(@PathVariable UUID id) {
+    // Appeler l'API pour récupérer le composant en tant qu'objet Composant
+    Composant composant = restTemplate.exchange(
+            COMPOSANT_URL_MS + "amal/composants/" + id,
+            HttpMethod.GET, null, Composant.class).getBody();
+
+    // Créer un objet ComposantDTO à partir du composant récupéré
+    ComposantDTO composantDTO = composantMapper.toDto(composant);
+
+    // Retourner l'objet ComposantDTO
+    return composantDTO;
+}
+
+
+//*********************************************************************************************** A tester **********************************************************************88
+
+    @GetMapping("/findForSavebyId/{id}")
+    public List<ComposantDTO> fetchStudentsSave(@PathVariable UUID id) {
+        // Fetch composants by their UUIDs
+        ResponseEntity<List<ComposantDTO>> response = restTemplate.exchange(
+                COMPOSANT_URL_MS + "amal/composants",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<ComposantDTO>>() {});
+
+        List<ComposantDTO> composants = response.getBody();
+        if (composants == null || composants.isEmpty()) {
+            return Collections.emptyList(); // Return an empty list if the response is null or empty
+        }
+
+        // Filter composants with the provided UUID
+        List<ComposantDTO> filteredComposants = composants.stream()
+                .filter(composant -> composant.id().equals(id))
+                .collect(Collectors.toList());
+
+        if (filteredComposants.isEmpty()) {
+            return Collections.emptyList(); // Return an empty list if no composants with the provided UUID are found
+        }
+
+        // Save the filtered composants with the same UUIDs
+        List<ComposantDTO> savedComposants = new ArrayList<>();
+        for (ComposantDTO composantDTO : filteredComposants) {
+            ComposantDTO savedComposantDTO = composantService.save(composantDTO);
+            savedComposants.add(savedComposantDTO);
+        }
+
+        return savedComposants;
+    }
+    @GetMapping("/findForSavebyId2/{id}")
+    public List<ComposantDTO> fetchStudentsSave2(@PathVariable UUID id) {
+        // Fetch composants by their UUIDs
+        ResponseEntity<List<ComposantDTO>> response = restTemplate.exchange(
+                COMPOSANT_URL_MS + "amal/composants",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<ComposantDTO>>() {});
+
+        List<ComposantDTO> composants = response.getBody();
+        if (composants == null || composants.isEmpty()) {
+            return Collections.emptyList(); // Return an empty list if the response is null or empty
+        }
+
+        // Filter composants with the provided UUID
+        List<ComposantDTO> filteredComposants = composants.stream()
+                .filter(composant -> composant.id().equals(id))
+                .collect(Collectors.toList());
+
+        if (filteredComposants.isEmpty()) {
+            return Collections.emptyList(); // Return an empty list if no composants with the provided UUID are found
+        }
+
+        // Save the filtered composants with the same UUIDs
+        List<ComposantDTO> savedComposants = new ArrayList<>();
+        for (ComposantDTO composantDTO : filteredComposants) {
+            // Create a new ComposantDTO with the same data but a new UUID
+            ComposantDTO newComposantDTO = new ComposantDTO(
+                    composantDTO.id(), // Generate a new UUID
+                    composantDTO.name(),
+                    composantDTO.statusId(),
+                    composantDTO.value(),
+                    composantDTO.lastStatusChangeTime(),
+                    composantDTO.lastStatus(),
+                    composantDTO.currentStatus(),
+                    composantDTO.code(),
+                    composantDTO.machineId(),
+                    composantDTO.componentTypeId(),
+                    composantDTO.model(),
+                    composantDTO.isDeleted(),
+                    composantDTO.composantCreatedDate(),
+                    composantDTO.composantModifiedDate()
+            );
+
+            // Save the composant with the new UUID
+            ComposantDTO savedComposantDTO = composantService.save(newComposantDTO);
+            savedComposants.add(savedComposantDTO);
+        }
+
+        return savedComposants;
+    }
+
+//*********************************************************************************************** A tester **********************************************************************88
+
+    @GetMapping("/findForSave/{nbr}")
+    public List<ComposantDTO> fetchStudentsSave(@PathVariable int nbr) {
+        ResponseEntity<List<ComposantDTO>> response = restTemplate.exchange(
+                COMPOSANT_URL_MS + "amal/composants",
+                HttpMethod.GET,
+                null,
+                new ParameterizedTypeReference<List<ComposantDTO>>() {}); // Utilisation de ParameterizedTypeReference
+
+        List<ComposantDTO> composants = response.getBody();
+        if (composants == null || composants.isEmpty()) {
+            return Collections.emptyList(); // Retourne une liste vide si la réponse est nulle ou vide
+        }
+
+        // Si le nombre demandé est supérieur à la taille de la liste, retourner la liste complète
+        int size = Math.min(nbr, composants.size());
+
+        // Sauvegarder les 'nbr' premiers éléments de la liste dans la base de données
+        List<ComposantDTO> savedComposants = new ArrayList<>();
+        for (int i = 0; i < size; i++) {
+            ComposantDTO composantDTO = composants.get(i);
+
+            // Mettre l'UUID de l'élément dans la zone de requête avant de le sauvegarder
+            composantDTO.id(); // Remplacer par composantDTO.getId() si l'UUID est fourni dans le DTO
+            // Sauvegarder le composant dans la base de données
+            ComposantDTO savedComposantDTO = composantService.save(composantDTO);
+            savedComposants.add(savedComposantDTO);
+        }
+
+        return savedComposants;
+    }
+
+
+    //*********************************************************************************************** A tester **********************************************************************88
 
     @GetMapping("")
     public List<ComposantDTO> getComposant() {
         List<Composant> composants = composantRepository.findAll();
-
         if (composants == null) {
             return Collections.emptyList(); // Retourne une liste vide
         }
-
         return composants.stream()
                 .map(composantMapper::toDto) // Utilisation de la référence de méthode
                 .collect(Collectors.toList());
     }
+//*********************************************************************************************** A tester **********************************************************************88
 
     @GetMapping("{id}")
     public ResponseEntity<ComposantDTO> findById(@PathVariable("id") UUID composantId) {
@@ -86,6 +238,7 @@ public class ComposantController {
         return ResponseEntity.ok().body(composantDTO);
     }
 
+//*********************************************************************************************** A tester **********************************************************************88
 
 
     @PostMapping("withId")
@@ -103,6 +256,7 @@ public class ComposantController {
 
 
 
+//*********************************************************************************************** A tester **********************************************************************88
 
    @PostMapping("")
    public ResponseEntity<ComposantDTO> addComposant(@Valid @RequestBody ComposantDTO composantDTO) throws URISyntaxException {
@@ -116,6 +270,8 @@ public class ComposantController {
                .header(HEADER_NAME, "A new composant is created with identifier " + savedComposantDTO.id()) // Utilisation de getId
                .body(savedComposantDTO); // Utilisation de savedComposantDTO
    }
+    //*********************************************************************************************** A tester **********************************************************************88
+
     @PatchMapping("{id}")
     public ResponseEntity<ComposantDTO> partialUpdateComposant(@PathVariable("id") UUID composantId, @RequestBody ComposantDTO composantDTO) {
         Optional<ComposantDTO> updatedComposantOptional = composantService.partialUpdate(composantId, composantDTO);
@@ -126,48 +282,13 @@ public class ComposantController {
         ComposantDTO updatedComposantDTO = updatedComposantOptional.get();
         return ResponseEntity.ok().body(updatedComposantDTO);
     }
+//*********************************************************************************************** A tester **********************************************************************88
 
 
     @GetMapping("{id}/statusid/{laststatusID}")
     public ResponseEntity<ComposantDTO> findByIdCheckStatus(@PathVariable("id") UUID composantId, @PathVariable("laststatusID")int status) {
-        if(0>=status || status>=6){
-            /*Composant composant = composantRepository.findLastStatusByStatusID(status).orElseThrow(
-                    () -> new ResourceNotFoundException("id status not found et invaliiiiid: " + status));*/
-            System.out.println("id status not found et invaliiiiid: " + status);
-            return null;
-        }
-        Composant composant = composantRepository.findComposantById(composantId).orElseThrow(
-                () -> new ResourceNotFoundException("Composant not found with ID: " + composantId));
-        ComposantDTO composantDTO=null;
-        if(composant.getStatusId()!=status){
-            System.out.println("status has changed");
 
-            //**********************************************
-            historiqueComposant historiquecomposant = new historiqueComposant(); // Create a new instance
-            // Set properties of historiquecomposant
-            historiquecomposant.setId(UUID.randomUUID());
-            historiquecomposant.setComposantId(composantId);
-            historiquecomposant.setDatetime(LocalDateTime.now());
-            historiquecomposant.setStatus(composant.getLastStatus());
-            historiquecomposant.setValue(composant.getValue());
-            historiqueComposant savedHistoriqueComposant = historiquecomposantRepository.save(historiquecomposant);
-            historiqueComposantDTO savedHistoriqueComposantDTO = historiquecomposantMapper.toDto(savedHistoriqueComposant);
-            //***********************
-            composant.setLastStatus(composantRepository.findLastStatusByStatusID(status));// if u want prevois set composant.getstatusId()
-            composant.setLastStatusChangeTime(composant.getLastStatusChangeTime());
-            composant.setStatusId(status);
-            composant.setLastStatusChangeTime(LocalDateTime.now());
-            Composant savedComposant = composantRepository.save(composant);
-            composantDTO = composantMapper.toDto(savedComposant);
-
-            //***********************
-
-
-        }else {
-            System.out.println("status not change");
-            composantDTO = composantMapper.toDto(composant);
-        }
-        return ResponseEntity.ok().body(composantDTO);
+        return composantService.findByIdCheckStatus(composantId,status);
     }
     //*********************************************************************************************** A tester **********************************************************************88
     @GetMapping("{id}/value/{valueComposant}")
@@ -175,56 +296,15 @@ public class ComposantController {
                                                        @PathVariable("valueComposant") int value) {
            return composantService.findByIdCheckaddInfo(composantId,value);
             }
-//*****
+//*********************************************************************************************** A tester **********************************************************************88
+
 
     @GetMapping("{id}/valusjson")
     public ResponseEntity<String> findByIdCheckaddInfo2(@PathVariable("id") UUID composantId,
                                                         @Valid @RequestBody ComposantDTO composantDTO) {
-        Composant composant = composantRepository.findComposantById(composantId).orElseThrow(
-                () -> new ResourceNotFoundException("Composant not found with ID: " + composantId));
-
-        String valueString = composantDTO.value(); // Obtenez la valeur du pourcentage sous forme de chaîne
-        // Supprimer le caractère '%' de la valeur
-        valueString = valueString.substring(0, valueString.length() - 1);
-
-        try {
-            // Convertir la valeur en pourcentage en entier
-            int value = Integer.parseInt(valueString);
-
-            // Vérifier si la valeur est inférieure à 20% ou supérieure à 80%
-            if (value <= 20 || value >= 80) {
-                //**************************************** si inf 20 & sup 80 *******************************************************
-                historiqueComposant historiquecomposant = new historiqueComposant(); // Create a new instance
-                // Set properties of historiquecomposant
-                historiquecomposant.setId(UUID.randomUUID());
-                historiquecomposant.setComposantId(composantId);
-                historiquecomposant.setDatetime(LocalDateTime.now());
-                historiquecomposant.setStatus(composant.getLastStatus());
-                historiquecomposant.setValue(composant.getValue());
-                //ajouter champs additionalInfo;
-                historiqueComposant savedHistoriqueComposant = historiquecomposantRepository.save(historiquecomposant);
-                historiqueComposantDTO savedHistoriqueComposantDTO = historiquecomposantMapper.toDto(savedHistoriqueComposant);
-
-                //***********************
-                composant.setValue(value + "%");
-                composantRepository.save(composant); // Mettre à jour la valeur du composant
-                if (value <= 20) {
-                    return ResponseEntity.ok("La valeur du composant est inférieure à 20%");
-                } else {
-                    return ResponseEntity.ok("La valeur du composant est supérieure à 80%");
-                }
-            } else {
-                composant.setValue(value + "%");
-                composantRepository.save(composant); // Mettre à jour la valeur du composant
-                return ResponseEntity.ok("La valeur du composant est dans la plage acceptable entre 20% et 80%");
-            }
-
-        } catch (NumberFormatException e) {
-            // En cas d'erreur lors de la conversion ou si la valeur n'est pas un pourcentage valide
-            return ResponseEntity.badRequest().body("La valeur du composant n'est pas un pourcentage valide");
-        }
+        return composantService.findByIdCheckaddInfo2(composantId,composantDTO);
     }
-/**/
+//*********************************************************************************************** A tester **********************************************************************88
 
 
     @DeleteMapping("{id}")
@@ -232,6 +312,8 @@ public class ComposantController {
         composantService.delete(composantId);
         return ResponseEntity.ok().build();
     }
+    //*********************************************************************************************** A tester **********************************************************************88
+
     @PutMapping("/{id}")
     public ResponseEntity<ComposantDTO> updateComposant(@PathVariable("id") UUID composantId,
                                                         @Valid @RequestBody ComposantDTO composantDTO) {
@@ -242,33 +324,44 @@ public class ComposantController {
         ComposantDTO updatedComposantDTO = composantService.update(composantDTO);
         return ResponseEntity.ok(updatedComposantDTO);
     }
+    //*********************************************************************************************** A tester **********************************************************************88
 
-    @GetMapping("")
-    public ResponseEntity<List<ComposantDTO>> getAllComposants() {
-        List<ComposantDTO> allComposants = new ArrayList<>();
-        int page = 0;
-        int size = 5; // Taille de la page souhaitée
+    @GetMapping("/findstring/{id}")
+    public String fetchStudentString(@PathVariable UUID id) {
+        Composant composant = restTemplate.exchange(
+                COMPOSANT_URL_MS + "amal/composants/" + id,
+                HttpMethod.GET, null, Composant.class).getBody();
+        System.out.println("Composant from composant " + composant);
+        return restTemplate.exchange(
+                COMPOSANT_URL_MS + "amal/composants/" + id,
+                HttpMethod.GET, null, String.class).getBody();
+    }
+//*********************************************************************************************** A tester **********************************************************************88
 
-        while (true) {
-            ResponseEntity<List<ComposantDTO>> response = restTemplate.exchange(
-                    "http://localhost:8081/api/composants/paged?page={page}&size={size}",
-                    HttpMethod.GET,
-                    null,
-                    new ParameterizedTypeReference<List<ComposantDTO>>() {},
-                    page,
-                    size
-            );
+    @GetMapping("/findstirng")
+    public String fetchStudentsString() {
+        return restTemplate.exchange(
+                COMPOSANT_URL_MS + "amal/composants",
+                HttpMethod.GET, null, String.class).getBody();
+    }
+    @GetMapping("/machine-details/{machineId}")
+    public ResponseEntity<List<ComposantDTO>> findByIdMachine(@PathVariable("machineId") UUID machineId) {
+        List<Composant> Composants = composantRepository.findByidMachine(machineId);
 
-            List<ComposantDTO> composants = response.getBody();
-            if (composants != null && !composants.isEmpty()) {
-                allComposants.addAll(composants);
-                page++;
-            } else {
-                break;
-            }
+        if (Composants.isEmpty()) {
+            // Si aucun historique n'est trouvé, renvoyer une liste vide avec un statut 200
+            List<ComposantDTO> historiqueComposantDTOs = new ArrayList<>(); // Utilisation de ArrayList pour une liste vide
+            return ResponseEntity.ok().body(historiqueComposantDTOs);
         }
 
-        return ResponseEntity.ok(allComposants);
+        // Si l'historique est trouvé, mapper les objets en DTO et renvoyer la liste avec un statut 200
+        List<ComposantDTO> historiqueComposantDTOs = Composants.stream()
+                .map(composantMapper::toDto)
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok().body(historiqueComposantDTOs);
     }
+
+
 }
 

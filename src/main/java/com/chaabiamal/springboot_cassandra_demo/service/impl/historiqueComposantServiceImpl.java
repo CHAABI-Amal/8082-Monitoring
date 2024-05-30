@@ -44,10 +44,8 @@ public class historiqueComposantServiceImpl implements historiqueComposantServic
     }
 
 
-
-    @Override
     public Optional<historiqueComposantDTO> partialUpdate(UUID id, historiqueComposantDTO historiqueComposantDTO) {
-        return historiquecomposantRepository.findById(id)
+        return historiquecomposantRepository.findByid(id)
                 .map(existingComposant -> {
                     if (historiqueComposantDTO.id() != null) {
                         existingComposant.setId(historiqueComposantDTO.id());

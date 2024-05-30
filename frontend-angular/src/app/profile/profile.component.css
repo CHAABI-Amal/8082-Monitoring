@@ -1,0 +1,95 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align items to the top */
+  height: 100vh;
+  background-color: #f9f9f9;
+}
+
+.profile-container {
+  width: 100%;
+  max-width: 1000px;
+  margin: 20px auto 0; /* Reduced spacing at the top */
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+.profile-card {
+  width: 100%;
+  max-width: 800px;
+  padding: 10px;
+  margin-right: 10px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.profile-pic {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.profile-detail {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.detail-title {
+  font-weight: bold;
+  color: #333;
+}
+
+.detail-value {
+  color: #666;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.profile-view {
+  display: flex;
+  justify-content: space-between;
+}
+
+.edit-section {
+  flex: 1;
+  max-width: 600px;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+.preview-container {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 150px;
+  border-radius: 10px;
+}
+
+.form-buttons {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Add space between profile section and edit section */
+.profile-view .edit-section {
+  margin-left: 20px;
+}

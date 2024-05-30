@@ -1,0 +1,13 @@
+<div class="container">
+  <mat-card *ngFor="let machine of machines; let i = index" class="machine-card">
+    <mat-card-header>
+      <mat-card-title>{{ machine.code }}</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <div class="canvas-container">
+        <canvas id="circularDashboard-{{i}}" width="400" height="400"></canvas>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

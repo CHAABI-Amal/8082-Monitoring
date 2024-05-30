@@ -1,0 +1,70 @@
+.container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+.card-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  justify-content: center;
+}
+
+.card {
+  width: 300px;
+  transition: transform 0.3s;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+mat-toolbar {
+  background: #1769aa; /* Warm color */
+}
+
+.mat-card {
+  background: #fff5e6; /* Light warm color */
+}
+
+.mat-card-title, .mat-card-subtitle {
+  color: #b35900; /* Darker warm color */
+}
+
+.mat-card-actions button {
+  margin-right: 8px;
+}
+
+.mat-card-header .mat-icon {
+  background-color: #ffcc80; /* Another warm color */
+}
+
+.example-header-image {
+  border-radius: 50%;
+}
+
+.icon-working {
+  color: green;
+}
+
+.icon-warning {
+  color: orange;
+}
+
+.icon-faulty {
+  color: red;
+}
+
+.icon-unknown {
+  color: grey;
+}
+
+.icon-disconnected {
+  color: black;
+}

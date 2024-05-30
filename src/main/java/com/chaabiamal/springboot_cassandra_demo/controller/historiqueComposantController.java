@@ -16,17 +16,18 @@ import javax.validation.Valid;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static org.springframework.boot.web.servlet.filter.ApplicationContextHeaderFilter.HEADER_NAME;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping("/amal/historiqueComposants")
 
 public class historiqueComposantController {
-    @Autowired
-    private final historiqueComposantService historiquecomposantService;
+    private final  historiqueComposantService historiquecomposantService;
     @Autowired
     private historiqueComposantRepository historiquecomposantRepository;
 
@@ -49,7 +50,22 @@ public class historiqueComposantController {
                 .header(HEADER_NAME, "A new historiqueComposant is created with identifier " + savedHistoriqueComposantDTO.id())
                 .body(savedHistoriqueComposantDTO);
     }
+//***************************************************************************
 
+
+    @PatchMapping("/{id}")
+public ResponseEntity<historiqueComposantDTO> updateHistoriqueComposant(@PathVariable UUID id, @Valid @RequestBody historiqueComposantDTO historiquecomposantDTO) {
+    Optional<historiqueComposantDTO> updatedComposantDTO = historiquecomposantService.partialUpdate(id, historiquecomposantDTO);
+
+    if (!updatedComposantDTO.isPresent()) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
+    return ResponseEntity
+            .status(HttpStatus.OK)
+            .header(HEADER_NAME, "HistoriqueComposant with identifier " + updatedComposantDTO.get().id() + " has been updated")
+            .body(updatedComposantDTO.get());
+}
     @GetMapping("{id}")
     public ResponseEntity<historiqueComposantDTO> findById(@PathVariable("id") UUID historiqueComposantId) {
         historiqueComposant historiqueComposant = historiquecomposantRepository.findByid(historiqueComposantId).orElseThrow(
@@ -89,4 +105,12 @@ public class historiqueComposantController {
         historiquecomposantService.delete(historiqueComposantId);
         return ResponseEntity.ok().build();
     }
+/*
+    @GetMapping("/composant/{composantId}/with-code")
+    public ResponseEntity<List<historiqueComposantDTO>> getHistoriqueComposantsWithCode(@PathVariable UUID composantId) {
+        List<historiqueComposantDTO> historiqueComposantsWithCode = historiqueComposantService.getHistoriqueComposantsWithCode(composantId);
+        return ResponseEntity.ok(historiqueComposantsWithCode);
+    }
+
+    */
 }

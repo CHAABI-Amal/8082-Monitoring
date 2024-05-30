@@ -1,0 +1,57 @@
+/* composants.component.css */
+.container {
+  margin: 20px; /* Adds margin around the container */
+}
+
+.mat-card-content {
+  margin-top: 20px; /* Adds margin between the title and table content */
+}
+
+table {
+  width: 100%;
+  table-layout: fixed; /* Ensures the table takes full width and columns are evenly distributed */
+}
+
+th, td {
+  padding: 4px; /* Reduces padding to make cells smaller */
+  font-size: 10px; /* Decreases font size for a more compact appearance */
+}
+
+.mat-header-cell {
+  padding: 4px; /* Ensures header cells have reduced padding */
+  font-size: 10px; /* Matches font size with table cells */
+}
+
+.mat-cell {
+  padding: 4px; /* Ensures regular cells have reduced padding */
+  font-size: 10px; /* Matches font size with header cells */
+}
+
+.mat-header-cell, .mat-cell {
+  white-space: nowrap; /* Prevents text from wrapping */
+  text-overflow: ellipsis; /* Adds ellipsis for overflow text */
+  overflow: hidden; /* Hides overflow text */
+}
+
+
+
+
+.icon-working {
+  color: green;
+}
+
+.icon-warning {
+  color: orange;
+}
+
+.icon-faulty {
+  color: red;
+}
+
+.icon-unknown {
+  color: grey;
+}
+
+.icon-disconnected {
+  color: black;
+}

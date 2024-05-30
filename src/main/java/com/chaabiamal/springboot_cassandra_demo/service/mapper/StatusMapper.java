@@ -7,7 +7,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface StatusMapper {
-    @Mapping(target = "ID", ignore = true)
+    @Mapping(target = "id", ignore = true)
     Status toEntity( StatusDTO dto);
     StatusDTO toDto( Status entity);
 }

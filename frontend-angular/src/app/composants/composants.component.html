@@ -1,0 +1,326 @@
+<div class="container">
+
+
+  <mat-card *ngIf="selectedComposant" class="edit-form">
+    <mat-card-header>
+      <mat-card-title>Éditer Component</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content class="edit-form-content">
+      <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Nom</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Machine</mat-label>
+          <mat-select formControlName="machineId">
+            <mat-option *ngFor="let machine of machines" [value]="machine.machineId">
+              {{ machine.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Code</mat-label>
+          <input matInput formControlName="code">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Statut</mat-label>
+          <mat-select formControlName="lastStatus">
+            <mat-option value="WORKING">Working</mat-option>
+            <mat-option value="WARNING">Warning</mat-option>
+            <mat-option value="FAULTY">Faulty</mat-option>
+            <mat-option value="UNKNOWN">Unknown</mat-option>
+            <mat-option value="DISCONNECTED">Disconnected</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>currentStatus</mat-label>
+          <mat-select formControlName="currentStatus">
+            <mat-option value="WORKING">Working</mat-option>
+            <mat-option value="WARNING">Warning</mat-option>
+            <mat-option value="FAULTY">Faulty</mat-option>
+            <mat-option value="UNKNOWN">Unknown</mat-option>
+            <mat-option value="DISCONNECTED">Disconnected</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Last Status Time</mat-label>
+          <input matInput type="datetime-local" formControlName="lastStatusChangeTime"  step="1">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Value</mat-label>
+          <input matInput formControlName="value">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Model</mat-label>
+          <input matInput formControlName="model">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Is Deleted</mat-label>
+          <mat-select formControlName="isDeleted">
+            <mat-option [value]="true">true</mat-option>
+            <mat-option [value]="false">false</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>ComposantCreated Date</mat-label>
+          <input matInput type="datetime-local" formControlName="composantCreatedDate"  step="1">
+        </mat-form-field>
+
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>ComposantModified Date</mat-label>
+          <input matInput type="datetime-local" formControlName="composantModifiedDate"  step="1">
+        </mat-form-field>
+
+
+        <div class="button-group">
+          <button mat-raised-button color="primary" type="submit">Enregistrer</button>
+          <button mat-raised-button color="warn" (click)="cancelEdit()">Annuler</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+
+
+
+
+
+  <mat-card *ngIf="showNewComposantForm" class="edit-form">
+    <mat-card-header>
+      <mat-card-title>Nouveau Composant</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content class="edit-form-content">
+      <form [formGroup]="newComposantForm" (ngSubmit)="onNewComposantSubmit()">
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Nom</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Machine</mat-label>
+          <mat-select formControlName="machineId">
+            <mat-option *ngFor="let machine of machines" [value]="machine.machineId">
+              {{ machine.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Code</mat-label>
+          <input matInput formControlName="code">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>lastStatus</mat-label>
+          <mat-select formControlName="lastStatus">
+            <mat-option value="WORKING">Working</mat-option>
+            <mat-option value="WARNING">Warning</mat-option>
+            <mat-option value="FAULTY">Faulty</mat-option>
+            <mat-option value="UNKNOWN">Unknown</mat-option>
+            <mat-option value="DISCONNECTED">Disconnected</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>currentStatus</mat-label>
+          <mat-select formControlName="currentStatus">
+            <mat-option value="WORKING">Working</mat-option>
+            <mat-option value="WARNING">Warning</mat-option>
+            <mat-option value="FAULTY">Faulty</mat-option>
+            <mat-option value="UNKNOWN">Unknown</mat-option>
+            <mat-option value="DISCONNECTED">Disconnected</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Last Status Change Date & Time</mat-label>
+          <input matInput type="datetime-local" formControlName="lastStatusChangeTime"  step="1">
+        </mat-form-field>
+
+
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Value</mat-label>
+          <input matInput formControlName="value">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Model</mat-label>
+          <input matInput formControlName="model">
+        </mat-form-field>
+
+
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Is Deleted</mat-label>
+          <mat-select formControlName="isDeleted">
+            <mat-option [value]="true">true</mat-option>
+            <mat-option [value]="false">false</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Composant Created Date</mat-label>
+          <input matInput type="datetime-local" formControlName="composantCreatedDate"  step="1">
+        </mat-form-field>
+
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Composant Modified Date</mat-label>
+          <input matInput type="datetime-local" formControlName="composantModifiedDate"  step="1">
+        </mat-form-field>
+
+        <div class="button-group">
+          <button mat-raised-button color="primary" type="submit">Enregistrer</button>
+          <button mat-raised-button color="warn" (click)="cancelNewComposant()">Annuler</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+
+
+
+
+
+
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        Composants
+      </mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+
+
+      <div class="toolbar-container">
+        <mat-form-field appearance="outline" class="filter-form-field">
+          <mat-label>Filter</mat-label>
+          <input matInput (change)="filterComposants($event)">
+        </mat-form-field>
+        <button (click)="newComposant()" mat-raised-button color="primary" class="new-composant-button" end>New Composant</button>
+      </div>
+
+      <table matSort mat-table [dataSource]="composantsDataSource" class="mat-elevation-z1">
+
+        <!-- Define columns with matColumnDef -->
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+          <td mat-cell *matCellDef="let composant"> {{composant.name}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="value">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Value </th>
+          <td mat-cell *matCellDef="let composant"> {{composant.value}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastStatusChangeTime">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Status Change Time </th>
+          <td mat-cell *matCellDef="let composant"> {{composant.lastStatusChangeTime}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="lastStatus">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Last Status </th>
+          <td mat-cell *matCellDef="let composant">
+            <mat-icon
+              matTooltip="{{composant.lastStatus}}"
+              [ngClass]="getClassForStatus(composant.lastStatus)">
+              {{ getIconForStatus(composant.lastStatus) }}
+            </mat-icon>
+          </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="currentStatus">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Current Status </th>
+          <td mat-cell *matCellDef="let composant">
+            <mat-icon
+              matTooltip="{{composant.currentStatus}}"
+              [ngClass]="getClassForStatus(composant.currentStatus)">
+              {{ getIconForStatus(composant.currentStatus) }}
+            </mat-icon>
+          </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="machineName">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Machine Name </th>
+          <td mat-cell *matCellDef="let composant"> {{ getMachineName(composant.machineId) }} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Code </th>
+          <td mat-cell *matCellDef="let composant"> {{composant.code}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="model">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Model </th>
+          <td mat-cell *matCellDef="let composant"> {{composant.model}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="isDeleted">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Is Deleted </th>
+          <td mat-cell *matCellDef="let composant"> {{composant.isDeleted}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="composantCreatedDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Created Date </th>
+          <td mat-cell *matCellDef="let composant"> {{composant.composantCreatedDate}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="composantModifiedDate">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Modified Date </th>
+          <td mat-cell *matCellDef="let composant"> {{composant.composantModifiedDate}} </td>
+        </ng-container>
+        <ng-container matColumnDef="historiques">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> History </th>
+          <td mat-cell *matCellDef="let composant">
+            <button (click)="composantHistoriques(composant)" mat-button color="primary" class="small-button">historiques</button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let composant" class="action-icons">
+            <button (click)="openEditForm(composant)" mat-icon-button color="primary">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button (click)="deleteComposant(composant)" mat-icon-button color="warn" class="action-icons">
+              <mat-icon >delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+
+        <!-- matHeaderRowDef and matRowDef should be outside of ng-container -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20,30,100]"
+                     showFirstLastButtons
+                     aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

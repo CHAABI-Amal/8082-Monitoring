@@ -1,0 +1,103 @@
+<div class="container">
+  <!-- Form for editing Type Machine -->
+  <mat-card *ngIf="selectedModules" class="edit-form">
+    <mat-card-header>
+      <mat-card-title>Edit Module</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description">
+        </mat-form-field>
+
+        <div class="button-group">
+          <button mat-raised-button color="primary" type="submit">Save</button>
+          <button mat-raised-button color="warn" (click)="cancelEdit()">Cancel</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Form for creating new Type Machine -->
+  <mat-card *ngIf="showNewModulesForm" class="edit-form">
+    <mat-card-header>
+      <mat-card-title>New Module</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <form [formGroup]="newModulesForm" (ngSubmit)="onNewStatusSubmit()">
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Name</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description">
+        </mat-form-field>
+
+        <div class="button-group">
+          <button mat-raised-button color="primary" type="submit">Save</button>
+          <button mat-raised-button color="warn" (click)="onCancelCreate()">Cancel</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <!-- Table of Type Machines -->
+  <mat-card class="machine-table">
+    <mat-card-header>
+      <mat-card-title>Modules</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <button (click)="newStatus()" mat-raised-button color="primary" class="new-machine-button">New Module</button>
+      <table mat-table [dataSource]="ModulesdataSource" class="mat-elevation-z8">
+        <!-- Column Definitions -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef>id </th>
+          <td mat-cell *matCellDef="let Status"> {{ Status.id}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef> Name </th>
+          <td mat-cell *matCellDef="let Status"> {{ Status.name }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef> Description </th>
+          <td mat-cell *matCellDef="let Status"> {{Status.description }} </td>
+        </ng-container>
+
+        <!-- Actions Column -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef> Actions </th>
+          <td mat-cell *matCellDef="let Status">
+            <button mat-icon-button color="primary" (click)="openEditForm(Status)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-icon-button color="warn" (click)="deleteModules(Status)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Table Rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+      <mat-paginator [pageSizeOptions]="[3,5, 10, 20, 30, 100]"
+                     showFirstLastButtons
+                     aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

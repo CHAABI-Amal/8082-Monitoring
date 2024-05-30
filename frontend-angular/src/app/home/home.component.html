@@ -1,0 +1,32 @@
+<mat-toolbar color="primary">
+  <mat-toolbar-row>
+    <span>Home</span>
+    <span class="spacer"></span>
+    <button mat-icon-button>
+      <mat-icon>settings</mat-icon>
+    </button>
+  </mat-toolbar-row>
+</mat-toolbar>
+
+<div class="container">
+  <div class="card-container">
+    <mat-card *ngFor="let machine of MachinesdataSource.data" class="card">
+      <mat-card-header>
+        <mat-icon mat-card-avatar class="example-header-image">devices</mat-icon>
+        <mat-card-title>{{ machine.name }}</mat-card-title>
+        <mat-card-subtitle> <mat-icon
+          matTooltip=" {{machine.currentStatus}}"
+          [ngClass]="getClassForStatus(machine.currentStatus)">
+          {{ getIconForStatus(machine.currentStatus) }}
+        </mat-icon></mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <p>Code: {{ machine.code }}</p>
+      </mat-card-content>
+      <mat-card-actions>
+        <button mat-button (click)="VoirDetails(machine)" color="primary">Voir Détails</button>
+        <button mat-button (click)="Configurations(machine)" color="accent">Configurer</button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>

@@ -9,6 +9,7 @@ import org.springframework.data.cassandra.core.mapping.PrimaryKeyColumn;
 import org.springframework.data.cassandra.core.mapping.Table;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 @JsonIdentityInfo(
 		generator = ObjectIdGenerators.PropertyGenerator.class,
@@ -20,50 +21,45 @@ public class Status implements Serializable {
 	@PrimaryKeyColumn(type = PrimaryKeyType.PARTITIONED)
 	@Column("id")
 	@CassandraType(type = CassandraType.Name.UUID)
-	private int ID;
-/*			ID  VALUE
-			1	Working
-			2	Warning
-			3	Faulty
-			4	Unknown
-			5	Disconnected
-*/
+	private UUID id;
 
 	@Column("value")
 	@CassandraType(type = CassandraType.Name.TEXT)
-	private String Value;// string ula hadi????
+	private String value;
 
 	@Column("description")
 	@CassandraType(type = CassandraType.Name.TEXT)
-	private String Description;
+	private String description;
 
+	// Getters and Setters
 
-//*******************************************
-
-
-	public int getID() {
-		return ID;
+	public Status(UUID id, String value, String description) {
+		this.id = id;
+		this.value = value;
+		this.description = description;
 	}
 
-	public void setID(int ID) {
-		this.ID = ID;
+	public UUID getId() {
+		return id;
+	}
+
+	public void setId(UUID id) {
+		this.id = id;
 	}
 
 	public String getValue() {
-		return Value;
+		return value;
 	}
 
 	public void setValue(String value) {
-		Value = value;
+		this.value = value;
 	}
 
 	public String getDescription() {
-		return Description;
+		return description;
 	}
 
 	public void setDescription(String description) {
-		Description = description;
+		this.description = description;
 	}
-
-
 }

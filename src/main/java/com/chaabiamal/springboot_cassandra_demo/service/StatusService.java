@@ -13,7 +13,7 @@ public interface StatusService {
 
     StatusDTO update( StatusDTO sDTO);
 
-    Optional< StatusDTO> partialUpdate(int id,  StatusDTO sDTO);
+    Optional< StatusDTO> partialUpdate(UUID id,  StatusDTO sDTO);
 
     Page< StatusDTO> findAll(Pageable pageable);
 

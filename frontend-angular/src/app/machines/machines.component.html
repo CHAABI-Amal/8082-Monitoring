@@ -1,0 +1,242 @@
+<div class="container">
+  <!-- Formulaire d'édition de la machine -->
+  <mat-card *ngIf="selectedMachine" class="edit-form">
+    <mat-card-header>
+      <mat-card-title>Éditer Machine</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Nom</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Code</mat-label>
+          <input matInput formControlName="code">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Type</mat-label>
+          <mat-select formControlName="type">
+            <mat-option *ngFor="let typeMachine of typeMachines" [value]="typeMachine.name">
+              {{ typeMachine.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Model</mat-label>
+          <mat-select formControlName="module">
+            <mat-option *ngFor="let module of Modules" [value]="module.name">
+              {{ module.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Is Online</mat-label>
+          <mat-select formControlName="isonline">
+            <mat-option [value]="true">true</mat-option>
+            <mat-option [value]="false">false</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Adresse IP</mat-label>
+          <input matInput formControlName="ipAddress">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Statut</mat-label>
+          <mat-select formControlName="currentStatus">
+            <mat-option value="WORKING">Working</mat-option>
+            <mat-option value="WARNING">Warning</mat-option>
+            <mat-option value="FAULTY">Faulty</mat-option>
+            <mat-option value="UNKNOWN">Unknown</mat-option>
+            <mat-option value="DISCONNECTED">Disconnected</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="button-group">
+          <button mat-raised-button color="primary" type="submit">Enregistrer</button>
+          <button mat-raised-button color="warn" (click)="cancelEdit()">Annuler</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+
+  <mat-card *ngIf="showNewMachineForm" class="edit-form">
+    <mat-card-header>
+      <mat-card-title>New Machine</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <form [formGroup]="newMachineForm" (ngSubmit)="onNewMachineSubmit()">
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Nom</mat-label>
+          <input matInput formControlName="name">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Code</mat-label>
+          <input matInput formControlName="code">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Type</mat-label>
+          <mat-select formControlName="type">
+            <mat-option *ngFor="let typeMachine of typeMachines" [value]="typeMachine.machinetypeId">
+              {{ typeMachine.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Model</mat-label>
+          <mat-select formControlName="module">
+            <mat-option *ngFor="let module of Modules" [value]="module.name">
+              {{ module.name }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Is Online</mat-label>
+          <mat-select formControlName="isonline">
+            <mat-option [value]="true">true</mat-option>
+            <mat-option [value]="false">false</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="description">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Adresse IP</mat-label>
+          <input matInput formControlName="ipAddress">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="form-field">
+          <mat-label>Statut</mat-label>
+          <mat-select formControlName="currentStatus">
+            <mat-option value="WORKING">Working</mat-option>
+            <mat-option value="WARNING">Warning</mat-option>
+            <mat-option value="FAULTY">Faulty</mat-option>
+            <mat-option value="UNKNOWN">Unknown</mat-option>
+            <mat-option value="DISCONNECTED">Disconnected</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="button-group">
+          <button mat-raised-button color="primary" type="submit">Enregistrer</button>
+          <button mat-raised-button color="warn" (click)="cancelCreat()">Annuler</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+
+
+
+  <!-- Tableau des machines -->
+  <mat-card class="machine-table">
+    <mat-card-header>
+      <mat-card-title>Machines</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <div class="toolbar-container">
+        <mat-form-field appearance="outline" class="filter-form-field">
+          <mat-label>Filter</mat-label>
+          <input matInput (change)="filterMachines($event)">
+        </mat-form-field>
+        <button (click)="newMachine()" mat-raised-button color="primary" class="new-composant-button">New Machine</button>
+      </div>
+      <table matSort mat-table [dataSource]="MachinesdataSource" class="mat-elevation-z1">
+        <!-- Column Definitions -->
+        <ng-container matColumnDef="name">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="code">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Code</th>
+          <td mat-cell *matCellDef="let element">{{ element.code }}</td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Type </th>
+          <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+        </ng-container>
+        <ng-container matColumnDef="module">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Model </th>
+          <td mat-cell *matCellDef="let element">{{ element.module }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="isonline">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Is Online</th>
+          <td mat-cell *matCellDef="let element">{{ element.isonline }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Description</th>
+          <td mat-cell *matCellDef="let element">{{ element.description }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="ipAddress">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>IP Address</th>
+          <td mat-cell *matCellDef="let element">{{ element.ipAddress }}</td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="currentStatus">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> Status</th>
+          <td mat-cell *matCellDef="let element">
+            <mat-icon
+              matTooltip="{{ element.currentStatus}}"
+              [ngClass]="getClassForStatus(element.currentStatus)">
+              {{ getIconForStatus(element.currentStatus) }}
+            </mat-icon>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="composants">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Composants</th>
+          <td mat-cell *matCellDef="let element">
+            <button (click)="composantes(element)" mat-button color="primary" class="small-button">Composants</button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef>Actions</th>
+          <td mat-cell *matCellDef="let element" class="action-icons">
+            <button (click)="openEditForm(element)" mat-icon-button color="primary">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button (click)="deleteComposant(element)" mat-icon-button color="warn" class="action-icons">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <!-- Table Header and Rows -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20, 30, 100]"
+                     showFirstLastButtons
+                     aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

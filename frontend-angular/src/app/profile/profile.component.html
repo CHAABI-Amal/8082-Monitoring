@@ -1,0 +1,69 @@
+<div class="container">
+  <mat-card class="profile-container">
+    <mat-card-header>
+      <mat-card-title>Profile</mat-card-title>
+    </mat-card-header>
+    <mat-divider></mat-divider>
+    <mat-card-content>
+      <div class="profile-view">
+        <!-- Profile Information Section -->
+        <div class="profile-section">
+          <mat-card class="profile-card">
+            <mat-card-header>
+              <div class="header-content">
+                <img mat-card-avatar class="profile-pic" src="assets/pic.png" alt="Profile Picture">
+                <mat-card-title>{{ profile.firstName }} {{ profile.lastName }}</mat-card-title>
+              </div>
+              <mat-card-actions>
+                <button mat-icon-button (click)="editProfile()">
+                  <mat-icon>edit</mat-icon>
+                </button>
+              </mat-card-actions>
+            </mat-card-header>
+
+            <mat-card-content>
+              <div class="profile-detail" *ngFor="let detail of profileDetails">
+                <span class="detail-title">{{ detail.label }}:</span>
+                <span class="detail-value">{{ detail.value }}</span>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+
+        <!-- Edit Profile Form Section -->
+        <div class="edit-section" *ngIf="isEdit">
+          <form [formGroup]="profileForm" (ngSubmit)="submitProfile()">
+            <mat-form-field class="full-width">
+              <input matInput placeholder="First Name" formControlName="firstName">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Last Name" formControlName="lastName">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Email" formControlName="email">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Phone Number" formControlName="phoneNumber">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <input matInput type="password" placeholder="Password" formControlName="password">
+            </mat-form-field>
+            <mat-form-field class="full-width">
+              <input matInput placeholder="Designation" formControlName="designation">
+            </mat-form-field>
+            <!-- <mat-form-field class="full-width">
+              <input type="file" (change)="onFileSelected($event)">
+            </mat-form-field>
+            <div *ngIf="selectedFile" class="preview-container">
+              <img [src]="selectedFile" class="preview-image" alt="Selected Image">
+            </div>-->
+            <div class="form-buttons">
+              <button mat-raised-button  type="submit"  color="primary">Save</button>
+              <button mat-button type="button"  (click)="cancelEdit()" color="accent">Cancel</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

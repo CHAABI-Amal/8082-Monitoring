@@ -1,0 +1,28 @@
+.spacer{
+  flex: auto;
+}
+.profile-logo {
+  width: 200px;
+  height: 30px;
+
+}
+.black-toolbar {
+  background-color: lightgray; /* Set the background color to black */
+
+}
+.vertical-buttons {
+  display: flex;
+  flex-direction: column;
+}
+.left-align {
+  text-align: left;
+
+}
+.left-align span {
+  margin-left: 0;
+}
+
+.left-align span {
+  text-align: left;
+}
+
