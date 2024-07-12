@@ -1,9 +1,9 @@
 package com.chaabiamal.springboot_cassandra_demo.controller;
 import com.chaabiamal.springboot_cassandra_demo.Exception.ResourceNotFoundException;
 import com.chaabiamal.springboot_cassandra_demo.model.Composant;
-import com.chaabiamal.springboot_cassandra_demo.model.historiqueComposant;
+
 import com.chaabiamal.springboot_cassandra_demo.repository.ComposantRepository;
-import com.chaabiamal.springboot_cassandra_demo.repository.historiqueComposantRepository;
+
 import com.chaabiamal.springboot_cassandra_demo.service.ComposantService;
 import com.chaabiamal.springboot_cassandra_demo.service.dto.ComposantDTO;
 import com.chaabiamal.springboot_cassandra_demo.service.mapper.ComposantMapper;
@@ -20,23 +20,22 @@ import java.util.stream.Collectors;
 import static org.springframework.boot.web.servlet.filter.ApplicationContextHeaderFilter.HEADER_NAME;
 
 @RestController
-
 @RequestMapping("/amal/composants")
 public class ComposantController {
     @Autowired
-    private final ComposantService composantService;
+    private ComposantService composantService;
     @Autowired
     private ComposantRepository composantRepository;
     @Autowired
-    private historiqueComposantRepository historiquecomposantRepository;
-
-    @Autowired
     private ComposantMapper composantMapper;
 
-    @Autowired
-    public ComposantController(ComposantService composantService) {
+    /*@Autowired
+    public ComposantController(ComposantService composantService, ComposantRepository composantRepository, ComposantMapper composantMapper) {
         this.composantService = composantService;
+        this.composantRepository = composantRepository;
+        this.composantMapper = composantMapper;
     }
+*/
     @GetMapping("")
     public List<ComposantDTO> getComposant() {
         List<Composant> composants = composantRepository.findAll();
@@ -48,7 +47,7 @@ public class ComposantController {
                 })
                 .collect(Collectors.toList());
     }
-
+/*
     @GetMapping("/manuel")
     public List<ComposantDTO> getComposantMan() {
         List<Composant> composants = composantRepository.findwithoutHistorique();
@@ -63,7 +62,7 @@ public class ComposantController {
                 })
                 .collect(Collectors.toList());
     }
-
+*/
     @PostMapping("")
     public ResponseEntity<ComposantDTO> addComposant(@Valid @RequestBody ComposantDTO composantDTO) throws URISyntaxException {
         Composant composant = composantMapper.toEntity(composantDTO); // Utilisation de composantMapper

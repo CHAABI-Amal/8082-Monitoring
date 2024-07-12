@@ -18,15 +18,9 @@ import java.util.UUID;
 @Service
 public class ComposantServiceImpl implements ComposantService {
 
-    private final ComposantRepository composantRepository;
-    private final ComposantMapper composantMapper;
+    private  ComposantRepository composantRepository;
+    private ComposantMapper composantMapper;
 
-    @Autowired
-
-    public ComposantServiceImpl(ComposantRepository composantRepository, ComposantMapper composantMapper) {
-        this.composantRepository = composantRepository;
-        this.composantMapper = composantMapper;
-    }
 
     @Override
     public ComposantDTO save(ComposantDTO composantDTO) {

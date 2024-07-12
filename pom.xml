@@ -93,7 +93,7 @@
             <artifactId>java-driver-core</artifactId>
             <version>4.13.0</version>
         </dependency>
-  
+
     </dependencies>
 
     <build>

@@ -23,50 +23,50 @@ public class Composant implements Serializable {
 	private UUID id = UUID.randomUUID();
 
 	@Transient
-	private historiqueComposant historiqueComposant;
+	private  UUID historiqueComposant;
 
-	@Column("status")
+	//@Column("status")
 	@CassandraType(type = CassandraType.Name.UUID)
 	private UUID status;//??? mnba3d
-	@Column("additionalInfo")
+	//@Column("additionalInfo")
 	@CassandraType(type = CassandraType.Name.TEXT)
 	private String additionalInfo;
-	@Column("lastStatusChangeTime")
+	//@Column("lastStatusChangeTime")
 	@CassandraType(type = CassandraType.Name.TIMESTAMP)
 	private LocalDateTime lastStatusChangeTime;
-	@Column("lastStatus")
+	//@Column("lastStatus")
 	@CassandraType(type = CassandraType.Name.TEXT)
 	private String lastStatus;
-	@Column("instanceCode")
+	//@Column("instanceCode")
 	@CassandraType(type = CassandraType.Name.TEXT)
 	private String instanceCode;
-	@Column("kioskId")
+	//@Column("kioskId")
 	@CassandraType(type = CassandraType.Name.UUID)
 	private UUID kioskId;
-	@Column("instanceName")
+	//@Column("instanceName")
 	@CassandraType(type = CassandraType.Name.TEXT)
 	private String instanceName;
-	@Column("componentTypeId")
+	//@Column("componentTypeId")
 	@CassandraType(type = CassandraType.Name.INT)
 	private Integer componentTypeId;
-	@Column("modelNumber")
+	//@Column("modelNumber")
 	@CassandraType(type = CassandraType.Name.TEXT)
 	private String modelNumber;
-	@Column("componentStatus")
+	//@Column("componentStatus")
 	@CassandraType(type = CassandraType.Name.TEXT)
 	private String componentStatus;
-	@Column("statusDate")
+	//@Column("statusDate")
 	@CassandraType(type = CassandraType.Name.TIMESTAMP)
 	private LocalDateTime statusDate;
-	@Column("isDeleted")
+	//@Column("isDeleted")
 	@CassandraType(type = CassandraType.Name.BOOLEAN)
 	private boolean isDeleted;
 	// cluster key, so we can get automatically sorted data
 	//@PrimaryKeyColumn(ordinal = 1, type = PrimaryKeyType.CLUSTERED, ordering = Ordering.DESCENDING, value = "created_at")
-	@Column("createdDate")
+	//@Column("createdDate")
 	@CassandraType(type = CassandraType.Name.TIMESTAMP)
 	private LocalDateTime createdDate;
-	@Column("modifiedDate")
+	//@Column("modifiedDate")
 	@CassandraType(type = CassandraType.Name.TIMESTAMP)
 	private LocalDateTime modifiedDate;
 
@@ -75,7 +75,7 @@ public class Composant implements Serializable {
 	public Composant() {
 	}
 
-	public Composant(UUID id, historiqueComposant historique, UUID status, String additionalInfo, LocalDateTime lastStatusChangeTime, String lastStatus, String instanceCode, UUID kioskId, String instanceName, Integer componentTypeId, String modelNumber, String componentStatus, LocalDateTime statusDate, boolean isDeleted, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+	public Composant(UUID id, UUID historique, UUID status, String additionalInfo, LocalDateTime lastStatusChangeTime, String lastStatus, String instanceCode, UUID kioskId, String instanceName, Integer componentTypeId, String modelNumber, String componentStatus, LocalDateTime statusDate, boolean isDeleted, LocalDateTime createdDate, LocalDateTime modifiedDate) {
 		System.out.println("Additional Info received: " + additionalInfo); // Debugging log
 		this.id = id;
 		this.historiqueComposant = historique;
@@ -103,11 +103,11 @@ public class Composant implements Serializable {
 		this.id = id;
 	}
 
-	public historiqueComposant getHistorique() {
+	public UUID getHistorique() {
 		return historiqueComposant;
 	}
 
-	public void setHistorique(historiqueComposant historique) {
+	public void setHistorique(UUID historique) {
 		this.historiqueComposant = historique;
 	}
 

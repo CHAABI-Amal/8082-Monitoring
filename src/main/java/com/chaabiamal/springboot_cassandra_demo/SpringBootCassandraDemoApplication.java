@@ -4,8 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import com.datastax.oss.driver.api.core.CqlSession;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 
-@SpringBootApplication(scanBasePackages = {"com.chaabiamal.springboot_cassandra_demo.model"})
+@SpringBootApplication
 public class SpringBootCassandraDemoApplication {
 
     public static void main(String[] args) {

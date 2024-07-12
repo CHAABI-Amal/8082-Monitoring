@@ -5,12 +5,11 @@ import com.chaabiamal.springboot_cassandra_demo.service.dto.ComposantDTO;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = historiqueComposantMapper.class)
+@Mapper(componentModel = "spring")
 public interface ComposantMapper {
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "historique", source = "historique")
     Composant toEntity(ComposantDTO dto);
 
-    @Mapping(target = "historique", ignore = true)
+
     ComposantDTO toDto(Composant entity);
 }
